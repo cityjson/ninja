@@ -8,7 +8,15 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.4",
     "core-js": "^3.1.2",
+    "earcut": "^2.2.1",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15",
+    "three": "^0.109.0",
+    "three-orbitcontrols": "^2.108.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {
