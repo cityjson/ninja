@@ -36,13 +36,13 @@
           </main>
           <div class="col-12 col-xl-8 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
-              <cityobject
+              <CityObjectCard
                 :cityobject="citymodel.CityObjects[selected_objid]"
                 @input="citymodel.CityObjects[selected_objid] = arguments[0]"
                 :cityobject_id="selected_objid"
                 :expanded=true
                 v-if="existsSelected"
-              ></cityobject>
+              ></CityObjectCard>
             </div>
             <ThreeJsViewer
               v-bind:citymodel="citymodel"
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import CityObjectCard from './components/CityObjectCard.vue'
 import CityObjectItem from './components/CityObjectItem.vue'
 import ThreeJsViewer from './components/ThreeJsViewer.vue'
 import $ from 'jquery'
@@ -86,6 +87,7 @@ import _ from 'lodash'
 export default {
   name: 'app',
   components: {
+    CityObjectCard,
     CityObjectItem,
     ThreeJsViewer
   },
