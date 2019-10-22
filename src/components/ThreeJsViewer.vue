@@ -136,6 +136,7 @@ export default {
       this.scene = new THREE.Scene();
       var ratio = $("#viewer").width() / $("#viewer").height();
       this.camera = new THREE.PerspectiveCamera( 60, ratio, 0.001, 1000 );
+      this.camera.up.set( 0, 0, 1 );
       
       this.renderer = new THREE.WebGLRenderer({
         antialias: true
