@@ -25,14 +25,14 @@
       </span>
     </div>
     <ul class="list-unstyled ml-4 mb-0" v-show="isOpen" v-if="isFolder">
-      <CityObjectItem
+      <CityObjectsTreeItem
         class="item"
         v-for="child_id in item.children"
         :key="child_id"
         :item="getObject(child_id)"
         :cityobject_id="child_id"
-        :selected="child_id == selected_objid"
-      ></CityObjectItem>
+        :selected_objid="selected_objid"
+      ></CityObjectsTreeItem>
     </ul>
   </li>
 </template>
@@ -41,18 +41,26 @@
 import _ from 'lodash'
 
 export default {
-  name: 'CityObjectItem',
+  name: 'CityObjectsTreeItem',
   props: {
     item: Object,
     cityobject_id: String,
-    selected: Boolean
+    selected_objid: String,
   },
   data: function () {
     return {
       isOpen: false
     }
   },
+  created() {
+    this.$on('object_clicked', (objid) => {
+      this.$parent.$emit('object_clicked', objid);
+    });
+  },
   computed: {
+    selected: function() {
+      return this.cityobject_id == this.selected_objid;
+    },
     singleGeometries: function() {
       return _.pickBy(this.item.geometry, function(geometry) {
         return geometry.lod;
@@ -69,9 +77,6 @@ export default {
     },
     iconType: function() {
       return this.getIconStyle(this.item);
-    },
-    selected_objid: function() {
-      return this.$parent.selected_objid;
     }
   },
   methods: {
