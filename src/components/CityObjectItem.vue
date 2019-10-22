@@ -7,14 +7,13 @@
       <span v-else class="mr-1">
         <i class="far fa-square text-secondary"></i>
       </span>
-      <a href="#" id="objicon" v-b-tooltip.hover :title="item.type"><i v-bind:class="iconType"></i></a>
+      <a href="#" id="objicon" :title="item.type"><i v-bind:class="iconType"></i></a>
       <a href="#" class="text-dark text-decoration-none" @click="select_this"><span :class="{ 'text-primary' : selected }">{{ cityobject_id }}</span></a>
       <a
         href="#"
         class="badge badge-primary mr-1"
         v-for="(geom, i) in singleGeometries"
         :key="i"
-        v-b-tooltip.hover
         :title="geom.type">
           <i :class="getGeometryIcon(geom.type)" class="mr-1"></i><small>{{ geom.lod }}</small>
       </a>

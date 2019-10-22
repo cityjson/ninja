@@ -3,7 +3,7 @@
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div class="text-truncate">
-          <a href="#" id="objicon" data-toggle="tooltip" data-placement="top" :title="cityobject.type"><i v-bind:class="iconType"></i></a> <a href="#" @click="select_this" class="text-dark text-decoration-none mr-5" >{{ cityobject_id }}</a>
+          <a href="#" id="objicon" :title="cityobject.type"><i v-bind:class="iconType"></i></a> <a href="#" @click="select_this" class="text-dark text-decoration-none mr-5" >{{ cityobject_id }}</a>
         </div>
         <div class="col-auto p-0">
           <a href="#" @click="expanded = !expanded" v-if="hasAttributes"><i class="fas text-secondary mr-1" :class="[ expanded ? 'fa-minus' : 'fa-plus' ]"></i></a>
@@ -16,7 +16,6 @@
           v-for="parent_id in cityobject.parents"
           :key="parent_id"
           :href="'#' + parent_id"
-          v-b-tooltip.hover
           :title="parent_id">
             <i class="text-danger" :class="getIconStyle(getObject(parent_id), false)"></i>
         </a>
@@ -27,7 +26,6 @@
           v-for="child_id in cityobject.children"
           :key="child_id"
           :href="'#' + child_id"
-          v-b-tooltip.hover
           :title="child_id">
             <i class="text-success" :class="getIconStyle(getObject(child_id), false)"></i>
         </a>
