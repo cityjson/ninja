@@ -1,5 +1,28 @@
 <template>
   <div class="h-100">
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModelLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title" id="helpModelLabel"><i class="far fa-question-circle mr-1"></i> Help</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>What a wonderful viewer!</p>
+            <p>Here is what you can do:</p>
+            <ul>
+              <li>Click on an object ID in the tree view on the left to select it.</li>
+              <li>Double-click on an object in the 3D view to select it.</li>
+              <li>When an object is selected you see a card with it's information (oh, wow)!</li>
+              <li>Toggle the editing mode with the <i class="fas fa-pen mx-1 text-muted"></i> icon to edit it. Then save the changes</li>
+              <li>Download the city model with your changes by clicking on <b>Download</b>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="#">CityJSON Viewer</a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
