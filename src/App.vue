@@ -23,12 +23,38 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="helpModelLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-info">
+            <h5 class="modal-title" id="helpModelLabel"><i class="fas fa-sliders-h mr-1"></i> Settings</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row" v-for="(colour, type) in object_colours" :key="type">
+              <!-- <label :for="type" class="col-sm-7 col-form-label">{{ type }}:</label> -->
+              <div class="input-group input-group-sm col">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" :id="type" :style="'color: #' + colour.toString(16)">{{ type }}</span>
+                </div>
+                <input type="text" class="form-control" :aria-describedby="type" :value="colour.toString(16)" @input="object_colours[type]=parseInt($event.target.value, 16)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand" href="#">CityJSON Viewer</a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
           <span class="sr-only">Loading...</span>
         </div>
+        <button type="button" class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#configModal">
+          <i class="fas fa-sliders-h mr-1"></i> Settings
+        </button>
         <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#helpModal">
           <i class="far fa-question-circle mr-1"></i> Help
         </button>
@@ -65,6 +91,7 @@
             <ThreeJsViewer
               v-bind:citymodel="citymodel"
               :selected_objid="selected_objid"
+              :object_colours="object_colours"
             ></ThreeJsViewer>
           </div>
         </div>
@@ -116,7 +143,30 @@ export default {
       citymodel: {},
       selected_objid: null,
       loading: false,
-      error_message: null
+      error_message: null,
+      object_colours: {
+        "Building": 0x7497df,
+        "BuildingPart": 0x7497df,
+        "BuildingInstallation": 0x7497df,
+        "Bridge": 0x999999,
+        "BridgePart": 0x999999,
+        "BridgeInstallation": 0x999999,
+        "BridgeConstructionElement": 0x999999,
+        "CityObjectGroup": 0xffffb3,
+        "CityFurniture": 0xcc0000,
+        "GenericCityObject": 0xcc0000,
+        "LandUse": 0xffffb3,
+        "PlantCover": 0x39ac39,
+        "Railway": 0x000000,
+        "Road": 0x999999,
+        "SolitaryVegetationObject": 0x39ac39,
+        "TINRelief": 0xe3eaf8,
+        "TransportSquare": 0x999999,
+        "Tunnel": 0x999999,
+        "TunnelPart": 0x999999,
+        "TunnelInstallation": 0x999999,
+        "WaterBody": 0x4da6ff
+      }
     }
   },
   created() {

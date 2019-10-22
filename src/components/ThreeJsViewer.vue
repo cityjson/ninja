@@ -10,33 +10,10 @@ import earcut from 'earcut'
 
 export default {
   name: 'ThreeJsViewer',
-  props: ['citymodel', 'selected_objid'],
+  props: ['citymodel', 'selected_objid', 'object_colours'],
   data() {
     return {
-      camera_init: false,
-      ALLCOLOURS: {
-        "Building": 0xcc0000,
-        "BuildingPart": 0xcc0000,
-        "BuildingInstallation": 0xcc0000,
-        "Bridge": 0x999999,
-        "BridgePart": 0x999999,
-        "BridgeInstallation": 0x999999,
-        "BridgeConstructionElement": 0x999999,
-        "CityObjectGroup": 0xffffb3,
-        "CityFurniture": 0xcc0000,
-        "GenericCityObject": 0xcc0000,
-        "LandUse": 0xffffb3,
-        "PlantCover": 0x39ac39,
-        "Railway": 0x000000,
-        "Road": 0x999999,
-        "SolitaryVegetationObject": 0x39ac39,
-        "TINRelief": 0xf8f9fa,
-        "TransportSquare": 0x999999,
-        "Tunnel": 0x999999,
-        "TunnelPart": 0x999999,
-        "TunnelInstallation": 0x999999,
-        "WaterBody": 0x4da6ff
-      }
+      camera_init: false
     }
   },
   beforeCreate() {
@@ -74,7 +51,16 @@ export default {
       this.$parent.$emit('rendering', false);
     }, 25);
   },
-  watch: { 
+  watch: {
+    object_colours: {
+      handler: function(newVal, ) {
+      for (var i = 0; i < this.meshes.length; i++)
+        this.meshes[i].material.color.setHex(newVal[this.citymodel.CityObjects[this.meshes[i].name].type]);
+
+      this.renderer.render(this.scene, this.camera);
+      },
+      deep: true
+    },
     citymodel: {
       handler: async function(newVal, ) {
         this.$parent.$emit('rendering', true);
@@ -98,7 +84,7 @@ export default {
       if (oldId != null)
       {
         var coType = this.citymodel.CityObjects[oldId].type;
-        this.mesh_index[oldId].material.color.setHex(this.ALLCOLOURS[coType]);
+        this.mesh_index[oldId].material.color.setHex(this.object_colours[coType]);
       }
 
       if (newId != null)
@@ -260,7 +246,7 @@ export default {
         //set color of object
         var coType = json.CityObjects[cityObj].type;
         var material = new THREE.MeshLambertMaterial();
-        material.color.setHex(this.ALLCOLOURS[coType]);
+        material.color.setHex(this.object_colours[coType]);
         
         //create mesh
         //geoms[cityObj].normalize()
