@@ -30,7 +30,7 @@ export default {
         "Railway": 0x000000,
         "Road": 0x999999,
         "SolitaryVegetationObject": 0x39ac39,
-        "TINRelief": 0x3FD43F,
+        "TINRelief": 0xf8f9fa,
         "TransportSquare": 0x999999,
         "Tunnel": 0x999999,
         "TunnelPart": 0x999999,
