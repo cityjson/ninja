@@ -113,11 +113,6 @@ export default {
     });
   },
   watch: {
-    firstLevelObjects: function() {
-      return _.pickBy(this.citymodel.CityObjects, function(cityobject) {
-        return !(cityobject.parents && cityobject.parents.length > 0);
-      });
-    },
     selected_objid: function() {
       if (this.selected_objid != null)
       {
@@ -127,6 +122,11 @@ export default {
     }
   },
   computed: {
+    firstLevelObjects: function() {
+      return _.pickBy(this.citymodel.CityObjects, function(cityobject) {
+        return !(cityobject.parents && cityobject.parents.length > 0);
+      });
+    },
     filteredCityObjects: function() {
       var result = _.pickBy(this.citymodel.CityObjects, function(value, key) {
         var regex = RegExp(this.search_term, "i");
