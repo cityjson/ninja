@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div class="form-group row">
-      <div class="input-group input-group-sm col">
-        <div class="input-group-prepend">
-          <span class="input-group-text" :id="name" :style="'color: #' + color.toString(16)">{{ name }}</span>
-        </div>
-        <input type="text" class="form-control" ref="colorValue" :aria-describedby="name" :value="color.toString(16)" @input="updateColor">
+  <div class="form-group row">
+    <div class="input-group input-group-sm col">
+      <div class="input-group-prepend">
+        <span class="input-group-text" :id="name" :style="'color: #' + color">{{ name }}</span>
       </div>
+      <input type="text" class="form-control" ref="colorValue" :aria-describedby="name" :value="color" @input="updateColor">
     </div>
   </div>
 </template>
@@ -15,13 +13,18 @@
 export default {
   name: 'ColorEditor',
   props: {
-    color: Number,
+    value: Number,
     name: String
   },
-  method: {
+  computed: {
+    color() {
+      return this.value.toString(16);
+    }
+  },
+  methods: {
     updateColor() {
-      this.color=parseInt(this.$refs.colorValue.value, 16);
-      this.$emit('input', this.color);
+      var new_color=parseInt(this.$refs.colorValue.value, 16);
+      this.$emit('input', new_color);
     }
   }
 }

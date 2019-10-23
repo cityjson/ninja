@@ -33,21 +33,17 @@
             </button>
           </div>
           <div class="modal-body">
+            <ColorEditor
+              v-model="background_color"
+              name="Background"
+            ></ColorEditor>
             <color-editor
               v-for="(colour, type) in object_colours"
               :key="type"
               v-model="object_colours[type]"
               :name="type"
             ></color-editor>
-            <div class="form-group row" v-for="(colour, type) in object_colours" :key="type">
-              <!-- <label :for="type" class="col-sm-7 col-form-label">{{ type }}:</label> -->
-              <div class="input-group input-group-sm col">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" :id="type" :style="'color: #' + colour.toString(16)">{{ type }}</span>
-                </div>
-                <input type="text" class="form-control" :aria-describedby="type" :value="colour.toString(16)" @input="object_colours[type]=parseInt($event.target.value, 16)">
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -98,6 +94,7 @@
               v-bind:citymodel="citymodel"
               :selected_objid="selected_objid"
               :object_colours="object_colours"
+              :background_color="background_color"
             ></ThreeJsViewer>
           </div>
         </div>
@@ -174,7 +171,8 @@ export default {
         "TunnelPart": 0x999999,
         "TunnelInstallation": 0x999999,
         "WaterBody": 0x4da6ff
-      }
+      },
+      background_color: 0xd9eefc
     }
   },
   created() {

@@ -10,7 +10,15 @@ import earcut from 'earcut'
 
 export default {
   name: 'ThreeJsViewer',
-  props: ['citymodel', 'selected_objid', 'object_colours'],
+  props: {
+    citymodel: Object,
+    selected_objid: String,
+    object_colours: Object,
+    background_color: {
+      type: Number,
+      default: 0xd9eefc
+    }
+  }, //['citymodel', 'selected_objid', 'object_colours'],
   data() {
     return {
       camera_init: false
@@ -52,6 +60,11 @@ export default {
     }, 25);
   },
   watch: {
+    background_color: function(newVal, ) {
+      this.renderer.setClearColor(newVal);
+      
+      this.renderer.render(this.scene, this.camera);
+    },
     object_colours: {
       handler: function(newVal, ) {
       for (var i = 0; i < this.meshes.length; i++)
@@ -130,7 +143,7 @@ export default {
       var viewer = document.getElementById("viewer");
       viewer.appendChild( this.renderer.domElement );
       this.renderer.setSize($("#viewer").width(), $("#viewer").height());
-      this.renderer.setClearColor(0xd9eefc);
+      this.renderer.setClearColor(this.background_color);
       this.renderer.shadowMap.enabled = true;
       this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             
