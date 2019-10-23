@@ -48,7 +48,7 @@
       </div>
     </div>
     <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand text-warning" href="#"><i class="fas fa-user-ninja mr-1"></i> Ninja</a>
+      <a class="navbar-brand text-warning" href="#"><i class="fas fa-user-ninja mr-1"></i> NINJa</a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
           <span class="sr-only">Loading...</span>
