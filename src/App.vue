@@ -73,11 +73,6 @@
                 <button class="btn btn-danger col-auto ml-2" @click="reset()"><i class="fas fa-times mr-1"></i> Close</button>
               </div>
             </div>
-            <CityObjectsTree
-              :cityobjects="firstLevelObjects"
-              :selected_objid="selected_objid"
-              :matches="matches"
-            ></CityObjectsTree>
           </main>
           <div class="col-12 col-xl-8 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
@@ -126,7 +121,6 @@
 
 <script>
 import CityObjectCard from './components/CityObjectCard.vue'
-import CityObjectsTree from './components/CityObjectsTree.vue'
 import ColorEditor from './components/ColorEditor.vue'
 import ThreeJsViewer from './components/ThreeJsViewer.vue'
 import $ from 'jquery'
@@ -136,7 +130,6 @@ export default {
   name: 'app',
   components: {
     CityObjectCard,
-    CityObjectsTree,
     ColorEditor,
     ThreeJsViewer
   },
