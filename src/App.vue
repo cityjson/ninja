@@ -38,12 +38,11 @@
               name="Background"
             ></ColorEditor>
             <color-editor
-              v-for="(colour, type) in object_colours"
+              v-for="(color, type) in object_colors"
               :key="type"
-              v-model="object_colours[type]"
+              v-model="object_colors[type]"
               :name="type"
             ></color-editor>
-            
           </div>
         </div>
       </div>
@@ -93,7 +92,7 @@
             <ThreeJsViewer
               v-bind:citymodel="citymodel"
               :selected_objid="selected_objid"
-              :object_colours="object_colours"
+              :object_colors="object_colors"
               :background_color="background_color"
             ></ThreeJsViewer>
           </div>
@@ -149,7 +148,7 @@ export default {
       selected_objid: null,
       loading: false,
       error_message: null,
-      object_colours: {
+      object_colors: {
         "Building": 0x7497df,
         "BuildingPart": 0x7497df,
         "BuildingInstallation": 0x7497df,

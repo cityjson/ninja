@@ -13,12 +13,12 @@ export default {
   props: {
     citymodel: Object,
     selected_objid: String,
-    object_colours: Object,
+    object_colors: Object,
     background_color: {
       type: Number,
       default: 0xd9eefc
     }
-  }, //['citymodel', 'selected_objid', 'object_colours'],
+  },
   data() {
     return {
       camera_init: false
@@ -65,7 +65,7 @@ export default {
       
       this.renderer.render(this.scene, this.camera);
     },
-    object_colours: {
+    object_colors: {
       handler: function(newVal, ) {
       for (var i = 0; i < this.meshes.length; i++)
         this.meshes[i].material.color.setHex(newVal[this.citymodel.CityObjects[this.meshes[i].name].type]);
@@ -97,7 +97,7 @@ export default {
       if (oldId != null)
       {
         var coType = this.citymodel.CityObjects[oldId].type;
-        this.mesh_index[oldId].material.color.setHex(this.object_colours[coType]);
+        this.mesh_index[oldId].material.color.setHex(this.object_colors[coType]);
       }
 
       if (newId != null)
@@ -259,7 +259,7 @@ export default {
         //set color of object
         var coType = json.CityObjects[cityObj].type;
         var material = new THREE.MeshLambertMaterial();
-        material.color.setHex(this.object_colours[coType]);
+        material.color.setHex(this.object_colors[coType]);
         
         //create mesh
         //geoms[cityObj].normalize()
