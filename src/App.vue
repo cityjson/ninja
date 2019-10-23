@@ -33,6 +33,12 @@
             </button>
           </div>
           <div class="modal-body">
+            <color-editor
+              v-for="(colour, type) in object_colours"
+              :key="type"
+              v-model="object_colours[type]"
+              :name="type"
+            ></color-editor>
             <div class="form-group row" v-for="(colour, type) in object_colours" :key="type">
               <!-- <label :for="type" class="col-sm-7 col-form-label">{{ type }}:</label> -->
               <div class="input-group input-group-sm col">
@@ -125,6 +131,7 @@
 <script>
 import CityObjectCard from './components/CityObjectCard.vue'
 import CityObjectsTree from './components/CityObjectsTree.vue'
+import ColorEditor from './components/ColorEditor.vue'
 import ThreeJsViewer from './components/ThreeJsViewer.vue'
 import $ from 'jquery'
 import _ from 'lodash'
@@ -134,6 +141,7 @@ export default {
   components: {
     CityObjectCard,
     CityObjectsTree,
+    ColorEditor,
     ThreeJsViewer
   },
   data: function() {
