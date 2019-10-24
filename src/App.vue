@@ -125,20 +125,14 @@
 </template>
 
 <script>
-import CityObjectCard from './components/CityObjectCard.vue'
-import CityObjectsTree from './components/CityObjectsTree.vue'
 import ColorEditor from './components/ColorEditor.vue'
-import ThreeJsViewer from './components/ThreeJsViewer.vue'
 import $ from 'jquery'
 import _ from 'lodash'
 
 export default {
   name: 'app',
   components: {
-    CityObjectCard,
-    CityObjectsTree,
-    ColorEditor,
-    ThreeJsViewer
+    ColorEditor
   },
   data: function() {
     return {
