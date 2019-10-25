@@ -16,7 +16,7 @@
     "@fortawesome/fontawesome-free": "^5.11.2",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
-    "cityjson-vue-components": "git+https://git@github.com/tudelft3d/cityjson-vue-components.git",
+    "cityjson-vue-components": "^0.1.1",
     "core-js": "^3.1.2",
     "earcut": "^2.2.1",
     "jquery": "^3.4.1",
