@@ -1,8 +1,6 @@
-# ninja
+# Ninja (Ninja Is Not Just azul)
 
 ![Ninja logo](https://github.com/liberostelios/ninja/raw/master/logo.png)
-
-Ninja Is Not Just azul
 
 ## Project setup
 ```
