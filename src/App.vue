@@ -47,8 +47,8 @@
         </div>
       </div>
     </div>
-    <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand text-warning" href="#"><i class="fas fa-user-ninja mr-1"></i> NINJa</a>
+    <nav class="navbar navbar-dark pl-0" :class="[ file_loaded ? 'bg-dark' : 'bg-white' ]">
+      <a class="navbar-brand" :class="[ file_loaded ? 'text-white' : 'text-dark' ]" href="#"><img :src="logoUrl" :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"> <span :class="{ 'text-big' : !file_loaded }">NINJa</span></a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
           <span class="sr-only">Loading...</span>
@@ -56,7 +56,7 @@
         <button type="button" class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#configModal">
           <i class="fas fa-sliders-h mr-1"></i> Settings
         </button>
-        <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#helpModal">
+        <button type="button" class="btn" :class="[ file_loaded ? 'btn-outline-light' : 'btn-outline-dark' ]" data-toggle="modal" data-target="#helpModal">
           <i class="far fa-question-circle mr-1"></i> Help
         </button>
       </div>
@@ -189,6 +189,14 @@ export default {
     }
   },
   computed: {
+    logoUrl: function() {
+      if (this.file_loaded)
+      {
+        return "/logoWHITE.svg";
+      }
+
+      return "logo.png";
+    },
     firstLevelObjects: function() {
       return _.pickBy(this.citymodel.CityObjects, function(cityobject) {
         return !(cityobject.parents && cityobject.parents.length > 0);
@@ -271,3 +279,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.logo-big {
+  position: absolute;
+  height: 120px;
+}
+
+.logo-regular {
+  height: 24px;
+}
+
+.text-big {
+  padding-left: 140px;
+}
+</style>
