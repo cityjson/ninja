@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <nav class="navbar navbar-dark pl-0" :class="[ file_loaded ? 'bg-dark' : 'bg-white' ]">
+    <nav class="navbar navbar-dark" :class="[ file_loaded ? 'bg-dark' : 'bg-white' ]">
       <a class="navbar-brand" :class="[ file_loaded ? 'text-white' : 'text-dark' ]" href="#"><img :src="logoUrl" :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"> <span :class="{ 'text-big' : !file_loaded }">NINJa</span></a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
