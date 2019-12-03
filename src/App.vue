@@ -192,10 +192,10 @@ export default {
     logoUrl: function() {
       if (this.file_loaded)
       {
-        return "/logoWHITE.svg";
+        return "logoWhite.svg";
       }
 
-      return "logo.png";
+      return "logoBlack.svg";
     },
     firstLevelObjects: function() {
       return _.pickBy(this.citymodel.CityObjects, function(cityobject) {
