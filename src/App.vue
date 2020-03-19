@@ -64,7 +64,11 @@
     <div id="main_content" v-if="file_loaded">
       <div class="container-fluid h-100">
         <div class="row h-100">
-          <main class="col-12 col-xl-4 p-0 h-100 d-flex flex-column">
+          <div class="bg-dark col-1 p-0">
+            <ninja-sidebar>
+            </ninja-sidebar>
+          </div>
+          <main class="col-11 col-xl-4 p-0 h-100 d-flex flex-column">
             <div class="p-3 shadow-sm">
               <h5>City Objects <span class="badge badge-secondary">{{ Object.keys(citymodel.CityObjects).length }} total</span></h5>
               <input type="search" class="form-control col mb-2 shadow-sm" placeholder="Search for IDs, object type or attributes..." v-model="search_term">
@@ -79,7 +83,7 @@
               :matches="matches"
             ></CityObjectsTree>
           </main>
-          <div class="col-12 col-xl-8 p-0 h-100">
+          <div class="col-12 col-xl-7 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
               <CityObjectCard
                 :cityobject="citymodel.CityObjects[selected_objid]"
@@ -126,13 +130,15 @@
 
 <script>
 import ColorEditor from './components/ColorEditor.vue'
+import NinjaSidebar from './components/NinjaSidebar.vue'
 import $ from 'jquery'
 import _ from 'lodash'
 
 export default {
   name: 'app',
   components: {
-    ColorEditor
+    ColorEditor,
+    NinjaSidebar
   },
   data: function() {
     return {
