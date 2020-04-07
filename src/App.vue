@@ -10,7 +10,8 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>What a wonderful viewer!</p>
+            <p>This is ninja, our new viewer for CityJSON.</p>
+            <p>The source code is available in our GitHub <a href="https://github.com/cityjson/ninja">repository</a>. Have fun and report any issues found <a href="https://github.com/cityjson/ninja/issues">here</a>.</p>
             <p>Here is what you can do:</p>
             <ul>
               <li>Click on an object ID in the tree view on the left to select it.</li>
@@ -48,7 +49,7 @@
       </div>
     </div>
     <nav class="navbar navbar-dark" :class="[ file_loaded ? 'bg-dark' : 'bg-white' ]">
-      <a class="navbar-brand" :class="[ file_loaded ? 'text-white' : 'text-dark' ]" href="#"><img :src="logoUrl" :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"> <span :class="{ 'text-big' : !file_loaded }">NINJa</span></a>
+      <a class="navbar-brand" :class="[ file_loaded ? 'text-white' : 'text-dark' ]" href="#"><img :src="logoUrl" :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"> <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
           <span class="sr-only">Loading...</span>
