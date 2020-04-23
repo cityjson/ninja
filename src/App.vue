@@ -66,24 +66,34 @@
       <div class="container-fluid h-100">
         <div class="row h-100">
           <div class="bg-dark col-1 p-0">
-            <ninja-sidebar>
+            <ninja-sidebar
+              v-model="active_sidebar"
+              :with_versions="has_versions">
             </ninja-sidebar>
           </div>
-          <main class="col-11 col-xl-4 p-0 h-100 d-flex flex-column">
-            <div class="p-3 shadow-sm">
-              <h5>City Objects <span class="badge badge-secondary">{{ Object.keys(citymodel.CityObjects).length }} total</span></h5>
-              <input type="search" class="form-control col mb-2 shadow-sm" placeholder="Search for IDs, object type or attributes..." v-model="search_term">
-              <div class="d-flex justify-content-end col-auto p-0" v-show="file_loaded">
-                <button class="btn btn-primary col-auto" @click="downloadModel()"><i class="fas fa-download mr-1"></i> Download</button>
-                <button class="btn btn-danger col-auto ml-2" @click="reset()"><i class="fas fa-times mr-1"></i> Close</button>
+          <div class="col-11 col-xl-4 p-0 h-100 d-flex flex-column">
+            <div v-show="active_sidebar == 'objects'">
+              <div class="p-3 shadow-sm">
+                <h5>City Objects <span class="badge badge-secondary">{{ Object.keys(citymodel.CityObjects).length }} total</span></h5>
+                <input type="search" class="form-control col mb-2 shadow-sm" placeholder="Search for IDs, object type or attributes..." v-model="search_term">
+                <div class="d-flex justify-content-end col-auto p-0" v-show="file_loaded">
+                  <button class="btn btn-primary col-auto" @click="downloadModel()"><i class="fas fa-download mr-1"></i> Download</button>
+                  <button class="btn btn-danger col-auto ml-2" @click="reset()"><i class="fas fa-times mr-1"></i> Close</button>
+                </div>
               </div>
+              <CityObjectsTree
+                :cityobjects="firstLevelObjects"
+                :selected_objid="selected_objid"
+                :matches="matches"
+              ></CityObjectsTree>
             </div>
-            <CityObjectsTree
-              :cityobjects="firstLevelObjects"
-              :selected_objid="selected_objid"
-              :matches="matches"
-            ></CityObjectsTree>
-          </main>
+            <div class="p-3" v-if="has_versions" v-show="active_sidebar == 'versions'">
+              <branch-selector v-model="active_branch" :versioning="citymodel.versioning">
+              </branch-selector>
+              <version-list :versioning="citymodel.versioning" :active_branch="active_branch">
+              </version-list>
+            </div>
+          </div>
           <div class="col-12 col-xl-7 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
               <CityObjectCard
@@ -132,6 +142,8 @@
 <script>
 import ColorEditor from './components/ColorEditor.vue'
 import NinjaSidebar from './components/NinjaSidebar.vue'
+import BranchSelector from './components/Versioning/BranchSelector.vue'
+import VersionList from './components/Versioning/VersionList.vue'
 import $ from 'jquery'
 import _ from 'lodash'
 
@@ -139,7 +151,9 @@ export default {
   name: 'app',
   components: {
     ColorEditor,
-    NinjaSidebar
+    NinjaSidebar,
+    BranchSelector,
+    VersionList
   },
   data: function() {
     return {
@@ -149,6 +163,9 @@ export default {
       selected_objid: null,
       loading: false,
       error_message: null,
+      active_sidebar: 'objects', // objects/versions
+      has_versions: false,
+      active_branch: 'master',
       object_colors: {
         "Building": 0x7497df,
         "BuildingPart": 0x7497df,
@@ -260,6 +277,8 @@ export default {
         var cm = JSON.parse(evt.target.result);
 
         this.citymodel = cm;
+
+        this.has_versions = "versioning" in cm;
 
         this.file_loaded = true;
 

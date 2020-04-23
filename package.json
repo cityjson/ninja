@@ -19,11 +19,13 @@
     "cityjson-vue-components": "^0.3.2",
     "core-js": "^3.6.5",
     "earcut": "^2.2.2",
-    "jquery": "^3.5.0",
+    "jquery": "^3.4.1",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "three": "^0.109.0",
     "three-orbitcontrols": "^2.110.3",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue2-filters": "^0.10.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",

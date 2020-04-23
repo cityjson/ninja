@@ -1,5 +1,5 @@
 <template>
-    <a href="#" class="sidebar-item">
+    <a href="#" class="sidebar-item" @click="optionClicked()">
         <i class="fas sidebar-icon" :class="icon_class"/>
         <span>
             {{ text }}
@@ -13,6 +13,11 @@ export default {
     props: {
         icon: String,
         text: String
+    },
+    methods: {
+        optionClicked() {
+            this.$emit('click');
+        }
     },
     computed: {
         icon_class: function() {

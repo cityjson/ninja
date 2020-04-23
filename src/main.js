@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import CityJSONComponents from 'cityjson-vue-components'
+import Vue2Filters from 'vue2-filters'
 
 Vue.use(CityJSONComponents);
+Vue.use(Vue2Filters);
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
