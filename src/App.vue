@@ -71,41 +71,54 @@
               :with_versions="has_versions">
             </ninja-sidebar>
           </div>
-          <div class="col-11 col-xl-4 p-0 h-100 d-flex flex-column">
-            <div v-show="active_sidebar == 'objects'">
-              <div class="p-3 shadow-sm">
-                <h5>City Objects <span class="badge badge-secondary">{{ Object.keys(citymodel.CityObjects).length }} total</span></h5>
-                <input type="search" class="form-control col mb-2 shadow-sm" placeholder="Search for IDs, object type or attributes..." v-model="search_term">
-                <div class="d-flex justify-content-end col-auto p-0" v-show="file_loaded">
-                  <button class="btn btn-primary col-auto" @click="downloadModel()"><i class="fas fa-download mr-1"></i> Download</button>
-                  <button class="btn btn-danger col-auto ml-2" @click="reset()"><i class="fas fa-times mr-1"></i> Close</button>
+          <div class="col-11 col-xl-4 p-0 h-100">
+            <div class="h-100" v-show="active_sidebar == 'objects'">
+              <div class="h-100 d-flex flex-column">
+                <div class="p-3 shadow-sm">
+                  <h5>
+                    City Objects
+                    <span class="badge badge-primary mr-1" v-if="active_version != null">
+                      Version: {{ active_version | truncate(7) }}
+                    </span>
+                    <span class="badge badge-secondary">
+                      {{ Object.keys(activeCityModel.CityObjects).length }} total
+                    </span>
+                  </h5>
+                  <input type="search" class="form-control col mb-2 shadow-sm" placeholder="Search for IDs, object type or attributes..." v-model="search_term">
+                  <div class="d-flex justify-content-end col-auto p-0" v-show="file_loaded">
+                    <button class="btn btn-primary col-auto" @click="downloadModel()"><i class="fas fa-download mr-1"></i> Download</button>
+                    <button class="btn btn-danger col-auto ml-2" @click="reset()"><i class="fas fa-times mr-1"></i> Close</button>
+                  </div>
                 </div>
+                <CityObjectsTree
+                  :cityobjects="firstLevelObjects"
+                  :selected_objid="selected_objid"
+                  :matches="matches"
+                ></CityObjectsTree>
               </div>
-              <CityObjectsTree
-                :cityobjects="firstLevelObjects"
-                :selected_objid="selected_objid"
-                :matches="matches"
-              ></CityObjectsTree>
             </div>
             <div class="p-3" v-if="has_versions" v-show="active_sidebar == 'versions'">
               <branch-selector v-model="active_branch" :versioning="citymodel.versioning">
               </branch-selector>
-              <version-list :versioning="citymodel.versioning" :active_branch="active_branch">
+              <version-list
+                :versioning="citymodel.versioning"
+                :active_branch="active_branch"
+                :active_version.sync="active_version">
               </version-list>
             </div>
           </div>
           <div class="col-12 col-xl-7 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
               <CityObjectCard
-                :cityobject="citymodel.CityObjects[selected_objid]"
-                @input="citymodel.CityObjects[selected_objid] = arguments[0]"
+                :cityobject="activeCityModel.CityObjects[selected_objid]"
+                @input="activeCityModel.CityObjects[selected_objid] = arguments[0]"
                 :cityobject_id="selected_objid"
                 :expanded=true
                 v-if="existsSelected"
               ></CityObjectCard>
             </div>
             <ThreeJsViewer
-              v-bind:citymodel="citymodel"
+              v-bind:citymodel="activeCityModel"
               :selected_objid="selected_objid"
               :object_colors="object_colors"
               :background_color="background_color"
@@ -166,6 +179,7 @@ export default {
       active_sidebar: 'objects', // objects/versions
       has_versions: false,
       active_branch: 'master',
+      active_version: null,
       object_colors: {
         "Building": 0x7497df,
         "BuildingPart": 0x7497df,
@@ -213,6 +227,14 @@ export default {
     }
   },
   computed: {
+    activeCityModel: function() {
+      if (this.active_version != null) {
+        return this.extract_citymodel(this.active_version);
+      }
+      else {
+        return this.citymodel;
+      }
+    },
     logoUrl: function() {
       if (this.file_loaded)
       {
@@ -222,12 +244,12 @@ export default {
       return "logoBlack.svg";
     },
     firstLevelObjects: function() {
-      return _.pickBy(this.citymodel.CityObjects, function(cityobject) {
+      return _.pickBy(this.activeCityModel.CityObjects, function(cityobject) {
         return !(cityobject.parents && cityobject.parents.length > 0);
       });
     },
     filteredCityObjects: function() {
-      var result = _.pickBy(this.citymodel.CityObjects, function(value, key) {
+      var result = _.pickBy(this.activeCityModel.CityObjects, function(value, key) {
         var regex = RegExp(this.search_term, "i");
         var obj_json = JSON.stringify(value);
         return regex.test(key) | regex.test(obj_json);
@@ -240,6 +262,22 @@ export default {
     }
   },
   methods: {
+    extract_citymodel(vid) {
+      var object_dict = this.citymodel.versioning.versions[vid].objects;
+      var original_objects = this.citymodel.CityObjects;
+
+      var result = $.extend({}, this.citymodel);
+
+      result["CityObjects"] = {};
+
+      delete result["versioning"];
+
+      Object.keys(object_dict).forEach((key) => {
+        result["CityObjects"][key] = $.extend({}, original_objects[object_dict[key]]);
+      });
+
+      return result;
+    },
     move_to_object(objid) {
       this.selected_objid = objid;
     },

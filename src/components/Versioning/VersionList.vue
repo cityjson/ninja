@@ -6,6 +6,7 @@
       :version="item"
       :vid="hash"
       :active="isActive(hash)"
+      @select="$emit('update:active_version', hash)"
     ></version-list-item>
   </div>
 </template>

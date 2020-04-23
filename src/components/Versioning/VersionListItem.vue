@@ -1,5 +1,5 @@
 <template>
-  <a class="list-group-item list-group-item-action flex-column align-items-start" v-bind:class="{ 'text-white' : active, active : active }" v-on:click="select_this">
+  <a class="list-group-item list-group-item-action flex-column align-items-start" v-bind:class="{ 'text-white' : active, active : active }" @click="$emit('select')">
     <div class="d-flex justify-content-between">
       <div class="col-8 pl-0">
         <h6 class="mb-1">{{ version.message }} <span class="badge" v-bind:class="[ active ? 'badge-light' : 'badge-success' ]">{{ version.objects.length }} objects</span></h6>
@@ -9,7 +9,7 @@
         <div class="input-group input-group-sm justify-content-end">
           <span class="input-group-text text-monospace" id="basic-addon1"><small>{{ vid | truncate(7) }}</small></span>
           <div class="input-group-append">
-            <button class="btn" v-bind:class="[ active ? 'btn-outline-light' : 'btn-outline-primary' ]" type="button" v-on:click="download_version(vid)"><i class="fas fa-download"></i></button>
+            <button class="btn" v-bind:class="[ active ? 'btn-outline-light' : 'btn-outline-primary' ]" type="button" @click="$emit('download')"><i class="fas fa-download"></i></button>
           </div>
         </div>
       </div>
@@ -31,11 +31,11 @@ export default {
     }
   },
   methods: {
-    download_version(vid) {
-      this.$emit('download', vid);
+    download_this() {
+      this.$emit('download');
     },
     select_this() {
-      this.$emit('click');
+      this.$emit('select');
     },
     moment: function () {
       return moment();
