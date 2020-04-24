@@ -144,6 +144,9 @@
             </div>
             <div class="alert alert-danger" role="alert" v-show="error_message">
               {{ error_message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
           </main>
         </div>
@@ -298,6 +301,16 @@ export default {
         return regex.test(coid) || regex.test(obj_json);
       }
     },
+    validateCityJSON(cm) {
+      if (cm.type != "CityJSON")
+      {
+        this.error_message = "This is not a CityJSON file!"
+
+        return false;
+      }
+
+      return true;
+    },
     async selectedFile() {
       this.loading = true;
 
@@ -313,6 +326,12 @@ export default {
       reader.readAsText(file, "UTF-8");
       reader.onload = evt => {
         var cm = JSON.parse(evt.target.result);
+
+        if (this.validateCityJSON(cm) == false)
+        {
+          this.loading = false;
+          return;
+        }
 
         this.citymodel = cm;
 
