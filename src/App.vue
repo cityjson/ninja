@@ -110,7 +110,7 @@
             </div>
           </div>
           <div class="col-12 col-xl-7 p-0 h-100">
-            <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
+            <div class="col-auto m-2" style="position: absolute; z-index: 1">
               <CityObjectCard
                 :citymodel="activeCityModel"
                 :cityobject="activeCityModel.CityObjects[selected_objid]"
@@ -130,6 +130,14 @@
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
             ></ThreeJsViewer>
+            <div style="position: absolute; z-index: 1; bottom: 0px; right: 0px">
+              <div class="card m-1 px-2">
+                <a href="https://cityjson.org" target="_blank"><img src="https://www.cityjson.org/assets/images/cityjson_logo.svg" alt=""></a>
+              </div>
+              <div class="card m-1 px-2">
+                <a class="card-link" href="https://github.com/cityjson/ninja" target="_blank"><i class="fab fa-github"></i> ninja v0.3.0</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
