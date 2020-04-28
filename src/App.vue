@@ -91,9 +91,11 @@
                   </div>
                 </div>
                 <CityObjectsTree
+                  :citymodel="activeCityModel"
                   :cityobjects="firstLevelObjects"
                   :selected_objid="selected_objid"
                   :matches="matches"
+                  @object_clicked="move_to_object($event)"
                 ></CityObjectsTree>
               </div>
             </div>
@@ -110,18 +112,23 @@
           <div class="col-12 col-xl-7 p-0 h-100">
             <div class="col-auto m-2 =0" style="position: absolute; z-index: 1">
               <CityObjectCard
+                :citymodel="activeCityModel"
                 :cityobject="activeCityModel.CityObjects[selected_objid]"
-                @input="activeCityModel.CityObjects[selected_objid] = arguments[0]"
                 :cityobject_id="selected_objid"
-                :expanded=true
+                :expanded="0"
+                :editable="true"
                 v-if="existsSelected"
+                @input="activeCityModel.CityObjects[selected_objid] = $event"
+                @close="selected_objid = null"
               ></CityObjectCard>
             </div>
             <ThreeJsViewer
-              v-bind:citymodel="activeCityModel"
+              :citymodel="activeCityModel"
               :selected_objid="selected_objid"
               :object_colors="object_colors"
               :background_color="background_color"
+              @object_clicked="move_to_object($event)"
+              @rendering="loading = $event"
             ></ThreeJsViewer>
           </div>
         </div>
@@ -208,17 +215,6 @@ export default {
       },
       background_color: 0xd9eefc
     }
-  },
-  created() {
-    let self = this;
-
-    this.$on('object_clicked', (objid) => {
-      self.move_to_object(objid);
-    });
-
-    this.$on('rendering', (status) => {
-      self.loading = status;
-    });
   },
   watch: {
     selected_objid: function() {
