@@ -2,7 +2,7 @@
   <a class="list-group-item list-group-item-action flex-column align-items-start" v-bind:class="{ 'text-white' : active, active : active }" @click="$emit('select')">
     <div class="d-flex justify-content-between">
       <div class="col-8 pl-0">
-        <h6 class="mb-1">{{ version.message }} <span class="badge" v-bind:class="[ active ? 'badge-light' : 'badge-success' ]">{{ version.objects.length }} objects</span></h6>
+        <h6 class="mb-1">{{ version.message }} <span class="badge" v-bind:class="[ active ? 'badge-light' : 'badge-success' ]">{{ Object.keys(version.objects).length }} objects</span></h6>
         <small v-bind:class="[ active ? 'text-white' : 'text-muted' ]"><b>{{ version.author }}</b> committed {{ version.date | moment_from }}.</small>
       </div>
       <div class="col-4 pr-0 align-self-center">
