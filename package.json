@@ -19,7 +19,7 @@
     "cityjson-vue-components": "^0.3.3",
     "core-js": "^3.6.5",
     "earcut": "^2.2.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "three": "^0.109.0",
