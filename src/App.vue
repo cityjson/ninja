@@ -16,7 +16,7 @@
             <ul>
               <li>Click on an object ID in the tree view on the left to select it.</li>
               <li>Double-click on an object in the 3D view to select it.</li>
-              <li>When an object is selected you see a card with it's information (oh, wow)!</li>
+              <li>When an object is selected you see a card with its information (oh, wow)!</li>
               <li>Toggle the editing mode with the <i class="fas fa-pen mx-1 text-muted"></i> icon to edit it. Then save the changes</li>
               <li>Download the city model with your changes by clicking on <b>Download</b>.</li>
             </ul>
