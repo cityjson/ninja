@@ -149,12 +149,9 @@
             <h2>File upload</h2>
             <p>Upload a CityJSON file to have fun!</p>
             <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-upload mr-1"></i> Upload</span>
-              </div>
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputGroupFile01" ref="cityJSONFile" @change="selectedFile">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file or drop it here...</label>
+                <label class="custom-file-label" for="inputGroupFile01">Click to browse or drop a CityJSON file here...</label>
               </div>
             </div>
             <div class="alert alert-danger" role="alert" v-show="error_message">
