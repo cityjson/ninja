@@ -143,7 +143,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="container">
+      <div class="container" style="width:75%; max-width: 680px">
         <div class="row">
           <main class="col-12 py-md-3 pl-md-5">
             <h2>File upload</h2>
