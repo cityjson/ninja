@@ -65,13 +65,13 @@
     <div id="main_content" v-if="file_loaded">
       <div class="container-fluid h-100">
         <div class="row h-100">
-          <div class="bg-dark col-1 p-0">
+          <div class="d-sm-none d-lg-block col-lg-1 bg-dark p-0">
             <ninja-sidebar
               v-model="active_sidebar"
               :with_versions="has_versions">
             </ninja-sidebar>
           </div>
-          <div class="col-11 col-xl-4 p-0 h-100">
+          <div class="d-none d-sm-block col-4 p-0 h-100">
             <div class="h-100" v-show="active_sidebar == 'objects'">
               <div class="h-100 d-flex flex-column">
                 <div class="p-3 shadow-sm">
@@ -109,7 +109,7 @@
               </version-list>
             </div>
           </div>
-          <div class="col-12 col-xl-7 p-0 h-100">
+          <div class="col-12 col-sm-8 col-lg-7 p-0 h-100">
             <div class="col-auto m-2" style="position: absolute; z-index: 1">
               <CityObjectCard
                 :citymodel="activeCityModel"
