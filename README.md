@@ -1,8 +1,14 @@
-# Ninja (Ninja Is Not Just azul)
+# ![ninja logo](logo_small.png) ninja
+*(ninja is not just azul)*
 
-![Ninja logo](https://github.com/liberostelios/ninja/raw/master/logo.png)
+`ninja` is a web viewer for CityJSON files.
 
-## Project setup
+A public version of it can be found [here](https://ninja.cityjson.org).
+
+## Development
+
+Install all dependencies:
+
 ```
 npm install
 ```
@@ -26,6 +32,3 @@ npm run electron:build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
