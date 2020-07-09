@@ -193,7 +193,7 @@ export default {
       error_message: null,
       active_sidebar: 'objects', // objects/versions
       has_versions: false,
-      active_branch: 'master',
+      active_branch: 'main',
       active_version: null,
       object_colors: {
         "Building": 0x7497df,
@@ -337,6 +337,16 @@ export default {
         this.citymodel = cm;
 
         this.has_versions = "versioning" in cm;
+
+        if (this.has_versions)
+        {
+          if ("main" in cm["versioning"]["branches"]) {
+            this.active_branch == "main";
+          }
+          else {
+            this.active_branch = Object.keys(cm["versioning"]["branches"])[0];
+          }
+        }
 
         this.file_loaded = true;
 
