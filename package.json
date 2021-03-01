@@ -22,7 +22,7 @@
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "three": "^0.109.0",
+    "three": "^0.125.0",
     "three-orbitcontrols": "^2.110.3",
     "vue": "^2.6.11",
     "vue2-filters": "^0.10.0"
