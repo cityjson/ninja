@@ -315,7 +315,7 @@ export default {
 
       return true;
     },
-    async selectedFile() {
+    selectedFile() {
       this.loading = true;
 
       let file = this.$refs.cityJSONFile.files[0];
