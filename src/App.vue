@@ -124,9 +124,9 @@
             </div>
             <ThreeJsViewer
               :citymodel="activeCityModel"
-              :selected_objid="selected_objid"
-              :object_colors="object_colors"
-              :background_color="background_color"
+              :selectedObjid="selected_objid"
+              :objectColors="object_colors"
+              :backgroundColor="background_color"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
             ></ThreeJsViewer>

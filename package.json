@@ -18,7 +18,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.11.0",
     "cityjson-vue-components": "git+https://github.com/cityjson/cityjson-vue-components.git#threejs-loader",
-    "core-js": "^3.6.5",
+    "core-js": "^3.21.1",
     "earcut": "^2.2.2",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
@@ -38,6 +38,7 @@
     "eslint": "^7.24.0",
     "eslint-plugin-vue": "^7.9.0",
     "parcel-bundler": "^1.12.5",
+    "regenerator-runtime": "^0.13.9",
     "static-server": "^2.2.1",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.6",
     "vue-template-compiler": "^2.6.11"

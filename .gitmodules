@@ -1,0 +1,3 @@
+[submodule "cityjson-vue-components"]
+	path = cityjson-vue-components
+	url = git@github.com:cityjson/cityjson-vue-components
