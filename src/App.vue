@@ -135,7 +135,7 @@
                 <a href="https://cityjson.org" target="_blank"><img src="https://www.cityjson.org/assets/images/cityjson_logo.svg" alt=""></a>
               </div>
               <div class="m-1 px-2">
-                <a class="card-link" href="https://github.com/cityjson/ninja" target="_blank"><i class="fab fa-github"></i> ninja v0.3.0</a>
+                <a class="card-link" href="https://github.com/cityjson/ninja" target="_blank"><i class="fab fa-github"></i> ninja v0.4.0</a>
               </div>
             </div>
           </div>
