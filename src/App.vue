@@ -54,9 +54,9 @@
         <div class="spinner-border text-warning mr-2" role="status" v-show="loading">
           <span class="sr-only">Loading...</span>
         </div>
-        <button type="button" class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#configModal">
+        <!-- <button type="button" class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#configModal">
           <i class="fas fa-sliders-h mr-1"></i> Settings
-        </button>
+        </button> -->
         <button type="button" class="btn" :class="[ file_loaded ? 'btn-outline-light' : 'btn-outline-dark' ]" data-toggle="modal" data-target="#helpModal">
           <i class="far fa-question-circle mr-1"></i> Help
         </button>
