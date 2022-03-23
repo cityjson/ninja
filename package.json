@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "parcel build public/index.html public/*.svg --out-dir ./dist/ --public-url . --no-cache",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
