@@ -224,14 +224,16 @@
               ></CityObjectCard>
             </div>
             <ThreeJsViewer
+              ref="viewer"
               :citymodel="activeCityModel"
               :selected-objid="selected_objid"
               :object-colors="object_colors"
               :background-color="background_color"
               :show-semantics="showSemantics"
+              :active-lod="activeLoD"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
-							ref="viewer"
+              @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
             ></ThreeJsViewer>
             <div
               style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
@@ -239,19 +241,29 @@
               <div class="custom-control custom-switch ml-1">
                 <input
                   id="semanticsSwitch"
+                  v-model="showSemantics"
                   type="checkbox"
                   class="custom-control-input"
-                  v-model="showSemantics"
                 >
                 <label
                   class="custom-control-label"
                   for="semanticsSwitch"
                 >Semantics</label>
               </div>
-              <div class="btn-group ml-1 mb-1" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary">Left</button>
-                <button type="button" class="btn btn-secondary">Middle</button>
-                <button type="button" class="btn btn-secondary">Right</button>
+              <div
+                class="btn-group ml-1 mb-1"
+                role="group"
+                aria-label="Basic example"
+              >
+                <button
+                  v-for="( lod, idx ) in availableLoDs"
+                  :key="lod"
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="activeLoD = idx"
+                >
+                  LoD{{ lod }}
+                </button>
               </div>
             </div>
             <div
@@ -381,7 +393,9 @@ export default {
 				"WaterBody": 0x4da6ff
 			},
 			background_color: 0xd9eefc,
-			showSemantics: true
+			showSemantics: true,
+			availableLoDs: [],
+			activeLoD: - 1
 		};
 
 	},
@@ -435,11 +449,6 @@ export default {
 		existsSelected: function () {
 
 			return this.selected_objid != null;
-
-		},
-		availableLoDs: function () {
-
-			return this.$refs.viewer.getLods();
 
 		}
 	},
