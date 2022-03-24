@@ -77,13 +77,13 @@
             <ColorEditor
               v-model="background_color"
               name="Background"
-            />
-            <color-editor
+            ></ColorEditor>
+            <ColorEditor
               v-for="(color, type) in object_colors"
               :key="type"
               v-model="object_colors[type]"
               :name="type"
-            />
+            ></ColorEditor>
           </div>
         </div>
       </div>
@@ -108,9 +108,14 @@
         >
           <span class="sr-only">Loading...</span>
         </div>
-        <!-- <button type="button" class="btn btn-outline-info mr-1" data-toggle="modal" data-target="#configModal">
+        <button
+          type="button"
+          class="btn btn-outline-info mr-1"
+          data-toggle="modal"
+          data-target="#configModal"
+        >
           <i class="fas fa-sliders-h mr-1"></i> Settings
-        </button> -->
+        </button>
         <button
           type="button"
           class="btn"
@@ -132,7 +137,7 @@
             <ninja-sidebar
               v-model="active_sidebar"
               :with_versions="has_versions"
-            />
+            ></ninja-sidebar>
           </div>
           <div class="col-4 p-0 h-100">
             <div
@@ -183,7 +188,7 @@
                   :selected_objid="selected_objid"
                   :matches="matches"
                   @object_clicked="move_to_object($event)"
-                />
+                ></CityObjectsTree>
               </div>
             </div>
             <div
@@ -194,12 +199,12 @@
               <branch-selector
                 v-model="active_branch"
                 :versioning="citymodel.versioning"
-              />
+              ></branch-selector>
               <version-list
                 :versioning="citymodel.versioning"
                 :active_branch="active_branch"
                 :active_version.sync="active_version"
-              />
+              ></version-list>
             </div>
           </div>
           <div class="col-7 p-0 h-100">
@@ -216,7 +221,7 @@
                 :editable="true"
                 @input="activeCityModel.CityObjects[selected_objid] = $event"
                 @close="selected_objid = null"
-              />
+              ></CityObjectCard>
             </div>
             <ThreeJsViewer
               :citymodel="activeCityModel"
@@ -225,7 +230,7 @@
               :background-color="background_color"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
-            />
+            ></ThreeJsViewer>
             <div
               class="card"
               style="position: absolute; z-index: 1; bottom: 0px; right: 0px"
