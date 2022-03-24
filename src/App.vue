@@ -228,9 +228,32 @@
               :selected-objid="selected_objid"
               :object-colors="object_colors"
               :background-color="background_color"
+              :show-semantics="showSemantics"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
+							ref="viewer"
             ></ThreeJsViewer>
+            <div
+              style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
+            >
+              <div class="custom-control custom-switch ml-1">
+                <input
+                  id="semanticsSwitch"
+                  type="checkbox"
+                  class="custom-control-input"
+                  v-model="showSemantics"
+                >
+                <label
+                  class="custom-control-label"
+                  for="semanticsSwitch"
+                >Semantics</label>
+              </div>
+              <div class="btn-group ml-1 mb-1" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-secondary">Left</button>
+                <button type="button" class="btn btn-secondary">Middle</button>
+                <button type="button" class="btn btn-secondary">Right</button>
+              </div>
+            </div>
             <div
               class="card"
               style="position: absolute; z-index: 1; bottom: 0px; right: 0px"
@@ -357,7 +380,8 @@ export default {
 				"TunnelInstallation": 0x999999,
 				"WaterBody": 0x4da6ff
 			},
-			background_color: 0xd9eefc
+			background_color: 0xd9eefc,
+			showSemantics: true
 		};
 
 	},
@@ -411,6 +435,11 @@ export default {
 		existsSelected: function () {
 
 			return this.selected_objid != null;
+
+		},
+		availableLoDs: function () {
+
+			return this.$refs.viewer.getLods();
 
 		}
 	},
