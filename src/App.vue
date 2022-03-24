@@ -78,12 +78,80 @@
               v-model="background_color"
               name="Background"
             ></ColorEditor>
-            <ColorEditor
-              v-for="(color, type) in object_colors"
-              :key="type"
-              v-model="object_colors[type]"
-              :name="type"
-            ></ColorEditor>
+            <div
+              id="accordionExample"
+              class="accordion"
+            >
+              <div class="card">
+                <div
+                  id="headingOne"
+                  class="card-header"
+                >
+                  <h2 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseOne"
+                      aria-expanded="true"
+                      aria-controls="collapseOne"
+                    >
+                      Object Colours
+                    </button>
+                  </h2>
+                </div>
+
+                <div
+                  id="collapseOne"
+                  class="collapse show"
+                  aria-labelledby="headingOne"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <ColorEditor
+                      v-for="(color, type) in object_colors"
+                      :key="type"
+                      v-model="object_colors[type]"
+                      :name="type"
+                    ></ColorEditor>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  id="headingTwo"
+                  class="card-header"
+                >
+                  <h2 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="collapseTwo"
+                    >
+                      Surface Colours
+                    </button>
+                  </h2>
+                </div>
+                <div
+                  id="collapseTwo"
+                  class="collapse"
+                  aria-labelledby="headingTwo"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <ColorEditor
+                      v-for="(color, type) in surface_colors"
+                      :key="type"
+                      v-model="surface_colors[type]"
+                      :name="type"
+                    ></ColorEditor>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -228,6 +296,7 @@
               :citymodel="activeCityModel"
               :selected-objid="selected_objid"
               :object-colors="object_colors"
+              :surface-colors="surface_colors"
               :background-color="background_color"
               :show-semantics="showSemantics"
               :active-lod="activeLoD"
@@ -391,6 +460,15 @@ export default {
 				"TunnelPart": 0x999999,
 				"TunnelInstallation": 0x999999,
 				"WaterBody": 0x4da6ff
+			},
+			surface_colors: {
+				"GroundSurface": 0x999999,
+				"WallSurface": 0xffffff,
+				"RoofSurface": 0xff0000,
+				"TrafficArea": 0x6e6e6e,
+				"AuxiliaryTrafficArea": 0x2c8200,
+				"Window": 0x0059ff,
+				"Door": 0x640000
 			},
 			background_color: 0xd9eefc,
 			showSemantics: true,
