@@ -1,6 +1,6 @@
 <template>
     <a href="#" class="sidebar-item" @click="optionClicked()">
-        <i class="fas sidebar-icon" :class="icon_class"/>
+        <i class="fas sidebar-icon" :class="icon_class"></i>
         <span>
             {{ text }}
         </span>

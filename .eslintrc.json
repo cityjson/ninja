@@ -1,0 +1,20 @@
+{
+	"root": true,
+	"parserOptions": {
+        "ecmaVersion": 2018
+	},
+
+	"extends": [
+		"mdcs",
+		"plugin:vue/recommended"
+	],
+
+	"rules": {
+		"no-unused-vars": [ 1, { "args": "none" } ],
+		"vue/html-self-closing": ["error", {
+			"html": {
+				"normal": "never"
+			}
+		}]
+	}
+}
