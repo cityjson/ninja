@@ -74,6 +74,18 @@
             </button>
           </div>
           <div class="modal-body">
+            <div class="form-group row custom-control custom-switch ml-1">
+              <input
+                id="cameraLightSwitch"
+                v-model="cameraLight"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="cameraLightSwitch"
+              >Camera light</label>
+            </div>
             <ColorEditor
               v-model="background_color"
               name="Background"
@@ -300,6 +312,7 @@
               :background-color="background_color"
               :show-semantics="showSemantics"
               :active-lod="activeLoD"
+              :camera-spotlight="cameraLight"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
@@ -473,7 +486,8 @@ export default {
 			background_color: 0xd9eefc,
 			showSemantics: true,
 			availableLoDs: [],
-			activeLoD: - 1
+			activeLoD: - 1,
+			cameraLight: false
 		};
 
 	},
