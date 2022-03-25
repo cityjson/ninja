@@ -89,7 +89,7 @@
                 >
                   <h2 class="mb-0">
                     <button
-                      class="btn btn-link btn-block text-left"
+                      class="btn btn-link btn-block text-left collapsed"
                       type="button"
                       data-toggle="collapse"
                       data-target="#collapseOne"
@@ -103,7 +103,7 @@
 
                 <div
                   id="collapseOne"
-                  class="collapse show"
+                  class="collapse"
                   aria-labelledby="headingOne"
                   data-parent="#accordionExample"
                 >
