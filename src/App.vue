@@ -353,7 +353,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.4.0</a>
+                ><i class="fab fa-github"></i> ninja v0.5.0</a>
               </div>
             </div>
           </div>
