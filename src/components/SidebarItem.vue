@@ -1,30 +1,41 @@
 <template>
-    <a href="#" class="sidebar-item" @click="optionClicked()">
-        <i class="fas sidebar-icon" :class="icon_class"></i>
-        <span>
-            {{ text }}
-        </span>
-    </a>
+  <a
+    href="#"
+    class="sidebar-item"
+    @click="optionClicked()"
+  >
+    <i
+      class="fas sidebar-icon"
+      :class="icon_class"
+    ></i>
+    <span>
+      {{ text }}
+    </span>
+  </a>
 </template>
 
 <script>
 export default {
-    name: "SidebarItem",
-    props: {
-        icon: String,
-        text: String
-    },
-    methods: {
-        optionClicked() {
-            this.$emit('click');
-        }
-    },
-    computed: {
-        icon_class: function() {
-            return "fa-" + this.icon;
-        }
-    }
-}
+	name: "SidebarItem",
+	props: {
+		icon: String,
+		text: String
+	},
+	computed: {
+		icon_class: function () {
+
+			return "fa-" + this.icon;
+
+		}
+	},
+	methods: {
+		optionClicked() {
+
+			this.$emit( 'click' );
+
+		}
+	}
+};
 </script>
 
 <style scoped>

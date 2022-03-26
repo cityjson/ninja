@@ -1,15 +1,20 @@
 <template>
   <div class="form-inline input-group my-2 my-lg-0">
     <div class="input-group-prepend">
-      <label class="input-group-text" for="branchSelect"><i class="fas fa-code-branch mr-1"></i> Branch</label>
+      <label
+        class="input-group-text"
+        for="branchSelect"
+      ><i class="fas fa-code-branch mr-1"></i> Branch</label>
     </div>
     <select
-      class="custom-select"
       id="branchSelect"
-      @change="$emit('input', $event.target.value)">
+      class="custom-select"
+      @change="$emit('input', $event.target.value)"
+    >
       <option
         v-for="(version, branch) in versioning.branches"
-        :key="branch">
+        :key="branch"
+      >
         {{ branch }}
       </option>
     </select>
@@ -18,10 +23,10 @@
 
 <script>
 export default {
-  name: 'BranchSelector',
-  props: {
-    value: String,
-    versioning: Object
-  }
-}
+	name: 'BranchSelector',
+	props: {
+		value: String,
+		versioning: Object
+	}
+};
 </script>

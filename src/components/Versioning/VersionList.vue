@@ -12,51 +12,58 @@
 </template>
 
 <script>
-import VersionListItem from './VersionListItem.vue'
+import VersionListItem from './VersionListItem.vue';
 
 export default {
-  name: 'VersionList',
-  components: {
-    VersionListItem
-  },
-  props: {
-    versioning: Object,
-    active_version: String,
-    active_branch: String
-  },
-  methods: {
-    isActive(vid) {
-      return this.active_version == vid;
-    },
-  },
-  computed: {
-    orderedVersions: function() {
-      var result = {};
+	name: 'VersionList',
+	components: {
+		VersionListItem
+	},
+	props: {
+		versioning: Object,
+		active_version: String,
+		active_branch: String
+	},
+	computed: {
+		orderedVersions: function () {
 
-      var current_vid = this.versioning.branches[this.active_branch];
-      result[current_vid] = this.versioning.versions[current_vid];
+			var result = {};
 
-      var new_parents = [];
-      
-      if ("parents" in result[current_vid])
-      {
-        new_parents = new_parents.concat(result[current_vid].parents);
-      }
+			var current_vid = this.versioning.branches[ this.active_branch ];
+			result[ current_vid ] = this.versioning.versions[ current_vid ];
 
-      while (new_parents.length > 0)
-      {
-        current_vid = new_parents.pop();
+			var new_parents = [];
 
-        result[current_vid] = this.versioning.versions[current_vid];
+			if ( "parents" in result[ current_vid ] ) {
 
-        if ("parents" in result[current_vid])
-        {
-          new_parents = result[current_vid].parents.concat(new_parents);
-        }
-      }
+				new_parents = new_parents.concat( result[ current_vid ].parents );
 
-      return result;
-    },
-  }
-}
+			}
+
+			while ( new_parents.length > 0 ) {
+
+				current_vid = new_parents.pop();
+
+				result[ current_vid ] = this.versioning.versions[ current_vid ];
+
+				if ( "parents" in result[ current_vid ] ) {
+
+					new_parents = result[ current_vid ].parents.concat( new_parents );
+
+				}
+
+			}
+
+			return result;
+
+		},
+	},
+	methods: {
+		isActive( vid ) {
+
+			return this.active_version == vid;
+
+		},
+	}
+};
 </script>
