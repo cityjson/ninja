@@ -267,7 +267,7 @@
                   :cityobjects="firstLevelObjects"
                   :selected_objid="selected_objid"
                   :matches="matches"
-                  @object_clicked="move_to_object($event)"
+                  @object_clicked="move_to_object( [ $event, - 1, - 1 ] )"
                 ></CityObjectsTree>
               </div>
             </div>
@@ -297,6 +297,8 @@
                 :citymodel="activeCityModel"
                 :cityobject="activeCityModel.CityObjects[selected_objid]"
                 :cityobject_id="selected_objid"
+                :geometry-id="selectedGeometryId"
+                :boundary-id="selectedBoundaryId"
                 :expanded="0"
                 :editable="true"
                 @input="activeCityModel.CityObjects[selected_objid] = $event"
@@ -445,6 +447,8 @@ export default {
 			search_term: "",
 			citymodel: {},
 			selected_objid: null,
+			selectedGeometryId: - 1,
+			selectedBoundaryId: - 1,
 			loading: false,
 			error_message: null,
 			active_sidebar: 'objects', // objects/versions
@@ -577,9 +581,22 @@ export default {
 			return result;
 
 		},
-		move_to_object( objid ) {
+		move_to_object( ids ) {
 
-			this.selected_objid = objid;
+			if ( ids ) {
+
+				// `ids` is in the form of [ objectId, geometryId, boudnaryId ]
+				this.selected_objid = ids[ 0 ];
+				this.selectedGeometryId = ids[ 1 ];
+				this.selectedBoundaryId = ids[ 2 ];
+
+			} else {
+
+				this.selected_objid = null;
+				this.selectedGeometryId = - 1;
+				this.selectedBoundaryId = - 1;
+
+			}
 
 		},
 		reset() {
