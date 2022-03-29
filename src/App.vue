@@ -309,12 +309,15 @@
               ref="viewer"
               :citymodel="activeCityModel"
               :selected-objid="selected_objid"
+              :selected-geom-idx="selectedGeometryId"
+              :selected-boundary-idx="selectedBoundaryId"
               :object-colors="object_colors"
               :surface-colors="surface_colors"
               :background-color="background_color"
               :show-semantics="showSemantics"
               :active-lod="activeLoD"
               :camera-spotlight="cameraLight"
+              :highlight-selected-surface="highlightSurface"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
@@ -322,6 +325,18 @@
             <div
               style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
             >
+              <div class="custom-control custom-switch ml-1">
+                <input
+                  id="surfaceSwitch"
+                  v-model="highlightSurface"
+                  type="checkbox"
+                  class="custom-control-input"
+                >
+                <label
+                  class="custom-control-label"
+                  for="surfaceSwitch"
+                >Select surface</label>
+              </div>
               <div class="custom-control custom-switch ml-1">
                 <input
                   id="semanticsSwitch"
@@ -489,6 +504,7 @@ export default {
 			},
 			background_color: 0xd9eefc,
 			showSemantics: true,
+      highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
 			cameraLight: false
