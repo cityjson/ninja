@@ -504,7 +504,7 @@ export default {
 			},
 			background_color: 0xd9eefc,
 			showSemantics: true,
-      highlightSurface: false,
+			highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
 			cameraLight: false
