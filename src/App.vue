@@ -90,6 +90,10 @@
               v-model="background_color"
               name="Background"
             ></ColorEditor>
+            <ColorEditor
+              v-model="selectionColor"
+              name="Selection"
+            ></ColorEditor>
             <div
               id="accordionExample"
               class="accordion"
@@ -314,6 +318,7 @@
               :object-colors="object_colors"
               :surface-colors="surface_colors"
               :background-color="background_color"
+              :selection-color="selectionColor"
               :show-semantics="showSemantics"
               :active-lod="activeLoD"
               :camera-spotlight="cameraLight"
@@ -503,6 +508,7 @@ export default {
 				"Door": 0x640000
 			},
 			background_color: 0xd9eefc,
+			selectionColor: 0xffc107,
 			showSemantics: true,
 			highlightSurface: false,
 			availableLoDs: [],
