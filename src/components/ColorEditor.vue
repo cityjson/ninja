@@ -34,7 +34,7 @@ export default {
 	computed: {
 		color() {
 
-			return '#' + this.value.toString( 16 );
+			return '#' + this.value.toString( 16 ).padStart( 6, '0' );
 
 		}
 	},
