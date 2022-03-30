@@ -356,15 +356,21 @@
                 >Semantics</label>
               </div>
               <div
-                class="btn-group ml-1 mb-1"
+                class="btn-group ml-1 mb-1 bg-white"
                 role="group"
                 aria-label="Basic example"
               >
                 <button
+                  type="button"
+                  :class="['btn', activeLoD == - 1 ? 'btn-primary' : 'btn-outline-primary']"
+                  @click="activeLoD = - 1">
+                  All
+                </button>
+                <button
                   v-for="( lod, idx ) in availableLoDs"
                   :key="lod"
                   type="button"
-                  class="btn btn-secondary"
+                  :class="['btn', activeLoD == idx ? 'btn-primary' : 'btn-outline-primary']"
                   @click="activeLoD = idx"
                 >
                   LoD{{ lod }}
