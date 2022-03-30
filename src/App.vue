@@ -30,14 +30,15 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>This is ninja, our new viewer for CityJSON.</p>
-            <p>The source code is available in our GitHub <a href="https://github.com/cityjson/ninja">repository</a>. Have fun and report any issues found <a href="https://github.com/cityjson/ninja/issues">here</a>.</p>
+            <p>This is ninja, our viewer for CityJSON.</p>
+            <p>The source code is available in <a href="https://github.com/cityjson/ninja">GitHub</a>. Have fun and, please, report any issues found <a href="https://github.com/cityjson/ninja/issues">here</a>.</p>
             <p>Here is what you can do:</p>
             <ul>
               <li>Click on an object ID in the tree view on the left to select it.</li>
-              <li>Double-click on an object in the 3D view to select it.</li>
-              <li>When an object is selected you see a card with it's information (oh, wow)!</li>
-              <li>Toggle the editing mode with the <i class="fas fa-pen mx-1 text-muted"></i> icon to edit it. Then save the changes</li>
+              <li>Click or tap on an object in the 3D view to select it.</li>
+              <li>When an object is selected you see a card with it's information (oh, wow)! If you click on a surface with semantics, its information will also be accessible.</li>
+              <li>Toggle between different LoDs by clicking on the corresponding buttons on the bottom left corner of the viewer.</li>
+              <li>Toggle the editing mode with the <i class="fas fa-pen mx-1 text-muted"></i> icon to edit it. Then save the changes.</li>
               <li>Download the city model with your changes by clicking on <b>Download</b>.</li>
             </ul>
           </div>
