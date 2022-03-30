@@ -1,34 +1,45 @@
 # ![ninja logo](logo_small.png) ninja
-*(ninja is not just azul)*
 
-`ninja` is a web viewer for CityJSON files.
+![](images/screenshot-3dbag.png)
 
-A public version of it can be found [here](https://ninja.cityjson.org).
+*ninja* is a web viewer for [CityJSON](http://www.cityjson.org) files. It supports most features as described by the CityJSON specification.
 
-## Development
+*ninja* stands for "**n**inja **i**s **n**ot **j**ust **a**zul" to tease [azul](https://github.com/tudelft3d/azul), the best macOS CityJSON viewer!
+
+# Use
+
+## Public version
+
+You can run `ninja` without installation by visiting [ninja.cityjson.org](https://ninja.cityjson.org).
+
+## Installation
 
 Install all dependencies:
 
 ```
-npm install
+yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Compile and run for development
+
 ```
-npm run serve
+yarn run dev
 ```
 
-### Compiles and minifies for production
+You can visit the local version at: [http://localhost:9080/dist/index.html](http://localhost:9080/dist/index.html).
+
+### Compile and run for production
+
 ```
-npm run build
+yarn run build
 ```
 
-### Compiles the desktop version
-```
-npm run electron:build
-```
+# Dependencies
 
-### Lints and fixes files
-```
-npm run lint
-```
+*ninja* uses [cityjson-vue-components](https://github.com/cityjson/cityjson-vue-components) and [cityjson-threejs-loader](https://github.com/cityjson/cityjson-threejs-loader) to handle things.
+
+Other frameworks used:
+- [three.js](https://threejs.org/)
+- [Vue.js](https://vuejs.org/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Parcel.js](https://parceljs.org/)
