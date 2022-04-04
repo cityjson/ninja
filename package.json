@@ -1,6 +1,6 @@
 {
   "name": "ninja",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "scripts": {
     "build": "parcel build public/index.html public/*.svg --out-dir ./dist/ --public-url . --no-cache",

@@ -396,7 +396,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.6.0</a>
+                ><i class="fab fa-github"></i> ninja v0.6.1</a>
               </div>
             </div>
           </div>
