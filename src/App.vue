@@ -87,6 +87,18 @@
                 for="cameraLightSwitch"
               >Camera light</label>
             </div>
+            <div class="form-group row custom-control custom-switch ml-1">
+              <input
+                id="performanceModeSwitch"
+                v-model="performanceMode"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="performanceModeSwitch"
+              >Performance mode</label>
+            </div>
             <ColorEditor
               v-model="background_color"
               name="Background"
@@ -169,6 +181,58 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="performanceModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="performanceModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-white">
+            <h5
+              id="performanceModalLabel"
+              class="modal-title"
+            >
+              <i class="fas fa-exclamation-triangle mr-1"></i> Performance mode
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+          </div>
+          <div class="modal-body">
+            You are about to disable performance mode. This might temporarily
+            make your browser unresponsive while the object list is populated.
+            Depending on your model's size, this might take a few seconds.
+
+            Are you sure you want to disable performance mode?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-dismiss="modal"
+              @click="performanceMode = false"
+            >
+              Go ahead, I am prepared!
+            </button>
           </div>
         </div>
       </div>
@@ -268,12 +332,43 @@
                   </div>
                 </div>
                 <CityObjectsTree
+                  v-if="! performanceMode"
                   :citymodel="activeCityModel"
                   :cityobjects="firstLevelObjects"
                   :selected_objid="selected_objid"
                   :matches="matches"
                   @object_clicked="move_to_object( [ $event, - 1, - 1 ] )"
                 ></CityObjectsTree>
+                <div
+                  v-else
+                  class="p-2"
+                >
+                  <div
+                    class="alert alert-warning"
+                    role="alert"
+                  >
+                    <h4 class="alert-heading">
+                      Performance mode!
+                    </h4>
+
+                    ninja detected that you have a large number of objects,
+                    therefore you are currently in performance mode. In this
+                    mode, the object list is disabled and certain features may
+                    not work properly. You can still use the 3D view and select
+                    objects.
+                    <hr>
+                    You can choose disable performance mode at your own risk by
+                    clicking on the button below!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    data-toggle="modal"
+                    data-target="#performanceModal"
+                  >
+                    Disable performance mode
+                  </button>
+                </div>
               </div>
             </div>
             <div
@@ -521,7 +616,8 @@ export default {
 			highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
-			cameraLight: false
+			cameraLight: false,
+			performanceMode: false
 		};
 
 	},
@@ -583,8 +679,14 @@ export default {
 
 			if ( this.selected_objid != null ) {
 
-				var card_id = $.escapeSelector( this.selected_objid );
-				$( `#${card_id}` )[ 0 ].scrollIntoViewIfNeeded();
+				const card_id = $.escapeSelector( this.selected_objid );
+				const card = $( `#${card_id}` )[ 0 ];
+
+				if ( card ) {
+
+					card.scrollIntoViewIfNeeded();
+
+				}
 
 			}
 
@@ -694,7 +796,9 @@ export default {
 
 				}
 
-				this.citymodel = cm;
+				this.performanceMode = Object.keys( cm.CityObjects ).length > 10000;
+
+				this.citymodel = this.performanceMode ? Object.freeze( cm ) : cm;
 
 				this.has_versions = "versioning" in cm;
 
