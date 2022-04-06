@@ -10,6 +10,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.6.1",
+    "cityjson-threejs-loader": "git+https://github.com/cityjson/cityjson-threejs-loader.git#develop",
     "cityjson-vue-components": "git+https://github.com/cityjson/cityjson-vue-components.git#threejs-loader",
     "earcut": "^2.2.2",
     "jquery": "^3.4.1",

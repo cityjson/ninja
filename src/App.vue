@@ -116,7 +116,7 @@
                   id="headingOne"
                   class="card-header"
                 >
-                  <h2 class="mb-0">
+                  <h4 class="mb-0">
                     <button
                       class="btn btn-link btn-block text-left collapsed"
                       type="button"
@@ -127,7 +127,7 @@
                     >
                       Object Colours
                     </button>
-                  </h2>
+                  </h4>
                 </div>
 
                 <div
@@ -151,7 +151,7 @@
                   id="headingTwo"
                   class="card-header"
                 >
-                  <h2 class="mb-0">
+                  <h4 class="mb-0">
                     <button
                       class="btn btn-link btn-block text-left collapsed"
                       type="button"
@@ -162,7 +162,7 @@
                     >
                       Surface Colours
                     </button>
-                  </h2>
+                  </h4>
                 </div>
                 <div
                   id="collapseTwo"
@@ -175,6 +175,67 @@
                       v-for="(color, type) in surface_colors"
                       :key="type"
                       v-model="surface_colors[type]"
+                      :name="type"
+                    ></ColorEditor>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  id="headingThree"
+                  class="card-header"
+                >
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseThree"
+                      aria-expanded="false"
+                      aria-controls="collapseThree"
+                    >
+                      Conditional formatting
+                    </button>
+                  </h5>
+                </div>
+                <div
+                  id="collapseThree"
+                  class="collapse"
+                  aria-labelledby="headingThree"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <div class="form-group row custom-control custom-switch ml-1">
+                      <input
+                        id="conditionalFormattingSwitch"
+                        v-model="conditionalFormatting"
+                        type="checkbox"
+                        class="custom-control-input"
+                      >
+                      <label
+                        class="custom-control-label"
+                        for="conditionalFormattingSwitch"
+                      >Show</label>
+                    </div>
+                    <div class="form-group">
+                      <label for="conditionalAttributeSelect">Attribute</label>
+                      <select
+                        id="conditionalAttributeSelect"
+                        class="form-control"
+                        @change="conditionalAttribute = $event.target.value"
+                      >
+                        <option
+                          v-for="attribute in conditionalAttributes"
+                          :key="attribute"
+                        >
+                          {{ attribute }}
+                        </option>
+                      </select>
+                    </div>
+                    <ColorEditor
+                      v-for="(color, type) in attributeColors"
+                      :key="type"
+                      v-model="attributeColors[type]"
                       :name="type"
                     ></ColorEditor>
                   </div>
@@ -419,11 +480,15 @@
               :active-lod="activeLoD"
               :camera-spotlight="cameraLight"
               :highlight-selected-surface="highlightSurface"
+              :conditional-formatting="conditionalFormatting"
+              :conditional-attribute="conditionalAttribute"
+              :attribute-colors="attributeColors"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
               @objectColorsChanged="object_colors = $event"
               @surfaceColorsChanged="surface_colors = $event"
+              @attributeColorsChanged="attributeColors = $event"
             ></ThreeJsViewer>
             <div
               style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
@@ -554,6 +619,7 @@ import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
 import BranchSelector from './components/Versioning/BranchSelector.vue';
 import VersionList from './components/Versioning/VersionList.vue';
+import { AttributeEvaluator } from 'cityjson-threejs-loader';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -619,7 +685,10 @@ export default {
 			availableLoDs: [],
 			activeLoD: - 1,
 			cameraLight: false,
-			performanceMode: false
+			performanceMode: false,
+			conditionalFormatting: false,
+			conditionalAttribute: '',
+			attributeColors: {}
 		};
 
 	},
@@ -673,6 +742,39 @@ export default {
 		existsSelected: function () {
 
 			return this.selected_objid != null;
+
+		},
+		conditionalAttributes: function () {
+
+			if ( ! this.citymodel.CityObjects ) {
+
+				return [];
+
+			}
+
+			const attributes = new Set( Object.keys( this.citymodel.CityObjects ).map( objId => {
+
+				const cityobject = this.citymodel.CityObjects[ objId ];
+
+				if ( cityobject.attributes ) {
+
+					return Object.keys( cityobject.attributes );
+
+				}
+
+				return [];
+
+			} ).flat() );
+
+			const atts = [ ...attributes ].filter( a => {
+
+				const evaluator = new AttributeEvaluator( this.citymodel, a, false );
+
+				return evaluator.getUniqueValues().length > 1 && evaluator.getUniqueValues().length < 20;
+
+			} );
+
+			return atts;
 
 		}
 	},
