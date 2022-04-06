@@ -422,6 +422,8 @@
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
+              @objectColorsChanged="object_colors = $event"
+              @surfaceColorsChanged="surface_colors = $event"
             ></ThreeJsViewer>
             <div
               style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
