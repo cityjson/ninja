@@ -419,7 +419,7 @@
                     not work properly. You can still use the 3D view and select
                     objects.
                     <hr>
-                    You can choose disable performance mode at your own risk by
+                    You can choose to disable performance mode at your own risk by
                     clicking on the button below!
                   </div>
                   <button
