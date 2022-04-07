@@ -224,6 +224,7 @@
                         class="form-control"
                         @change="conditionalAttribute = $event.target.value"
                       >
+                        <option value=""></option>
                         <option
                           v-for="attribute in conditionalAttributes"
                           :key="attribute"
