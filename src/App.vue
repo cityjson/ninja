@@ -299,6 +299,28 @@
                         </option>
                       </select>
                     </div>
+                    <div class="form-group">
+                      <label for="textureThemeSelect">Textures ({{ resolvedTextures }} / {{ totalTextures }})</label>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-image mr-1"></i> Textures</span>
+                        </div>
+                        <div class="custom-file">
+                          <input
+                            id="inputGroupFile01"
+                            ref="textureFile"
+                            type="file"
+                            class="custom-file-input"
+                            multiple="multiple"
+                            @change="uploadTexture"
+                          >
+                          <label
+                            class="custom-file-label"
+                            for="inputGroupFile01"
+                          >Choose file or drop it here...</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -846,6 +868,28 @@ export default {
 
 			return atts;
 
+		},
+		totalTextures: function () {
+
+			if ( this.textureManager ) {
+
+				return this.textureManager.totalTextures;
+
+			}
+
+			return 0;
+
+		},
+		resolvedTextures: function () {
+
+			if ( this.textureManager ) {
+
+				return this.textureManager.resolvedTextures;
+
+			}
+
+			return 0;
+
 		}
 	},
 	watch: {
@@ -942,6 +986,17 @@ export default {
 			}
 
 			return true;
+
+		},
+		uploadTexture() {
+
+			const files = this.$refs.textureFile.files;
+
+			for ( const file in files ) {
+
+				this.textureManager.setTextureFromFile( files[ file ] );
+
+			}
 
 		},
 		selectedFile() {
