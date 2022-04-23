@@ -268,15 +268,31 @@
                 >
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="Material Theme Select">Material theme</label>
+                      <label for="materialThemeSelect">Material theme</label>
                       <select
-                        id="Material Theme Select"
+                        id="materialThemeSelect"
                         class="form-control"
                         @change="activeMaterialTheme = $event.target.value"
                       >
                         <option value="undefined"></option>
                         <option
                           v-for="theme of materialThemes"
+                          :key="theme"
+                        >
+                          {{ theme }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="textureThemeSelect">Texture theme</label>
+                      <select
+                        id="textureThemeSelect"
+                        class="form-control"
+                        @change="activeTextureTheme = $event.target.value"
+                      >
+                        <option value="undefined"></option>
+                        <option
+                          v-for="theme of textureThemes"
                           :key="theme"
                         >
                           {{ theme }}
@@ -529,6 +545,8 @@
               :conditional-attribute="conditionalAttribute"
               :attribute-colors="attributeColors"
               :active-material-theme="activeMaterialTheme"
+              :texture-manager="textureManager"
+              :active-texture-theme="activeTextureTheme"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -666,7 +684,7 @@ import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
 import BranchSelector from './components/Versioning/BranchSelector.vue';
 import VersionList from './components/Versioning/VersionList.vue';
-import { AttributeEvaluator } from 'cityjson-threejs-loader';
+import { AttributeEvaluator, TextureManager } from 'cityjson-threejs-loader';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -737,7 +755,10 @@ export default {
 			conditionalAttribute: '',
 			attributeColors: {},
 			materialThemes: [],
-			activeMaterialTheme: 'undefined'
+			activeMaterialTheme: 'undefined',
+			textureManager: null,
+			textureThemes: [],
+			activeTextureTheme: 'undefined'
 		};
 
 	},
@@ -1017,9 +1038,45 @@ export default {
 			return [ ... new Set( themes ) ];
 
 		},
+		getTextureThemes( citymodel ) {
+
+			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
+
+				const [ , obj ] = cityobject;
+
+				if ( obj.geometry ) {
+
+					return obj.geometry.map( geom => {
+
+						if ( geom.texture ) {
+
+							return Object.keys( geom.texture );
+
+						} else {
+
+							return [];
+
+						}
+
+					} );
+
+				} else {
+
+					return [];
+
+				}
+
+
+			} ).flat( 2 );
+
+			return [ ... new Set( themes ) ];
+
+		},
 		onLoadComplete() {
 
 			this.materialThemes = this.getMaterialThemes( this.citymodel );
+			this.textureThemes = this.getTextureThemes( this.citymodel );
+			this.textureManager = new TextureManager( this.citymodel );
 
 		}
 	}
