@@ -242,6 +242,50 @@
                   </div>
                 </div>
               </div>
+              <div class="card">
+                <div
+                  id="headingAppearance"
+                  class="card-header"
+                >
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseAppearance"
+                      aria-expanded="false"
+                      aria-controls="collapseAppearance"
+                    >
+                      Appearance
+                    </button>
+                  </h5>
+                </div>
+                <div
+                  id="collapseAppearance"
+                  class="collapse"
+                  aria-labelledby="headingAppearance"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="Material Theme Select">Material theme</label>
+                      <select
+                        id="Material Theme Select"
+                        class="form-control"
+                        @change="activeMaterialTheme = $event.target.value"
+                      >
+                        <option value="undefined"></option>
+                        <option
+                          v-for="theme of materialThemes"
+                          :key="theme"
+                        >
+                          {{ theme }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -484,8 +528,10 @@
               :conditional-formatting="conditionalFormatting"
               :conditional-attribute="conditionalAttribute"
               :attribute-colors="attributeColors"
+              :active-material-theme="activeMaterialTheme"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
+              @loadCompleted="onLoadComplete()"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
               @objectColorsChanged="object_colors = $event"
               @surfaceColorsChanged="surface_colors = $event"
@@ -689,7 +735,9 @@ export default {
 			performanceMode: false,
 			conditionalFormatting: false,
 			conditionalAttribute: '',
-			attributeColors: {}
+			attributeColors: {},
+			materialThemes: [],
+			activeMaterialTheme: 'undefined'
 		};
 
 	},
@@ -933,6 +981,45 @@ export default {
 			var text = JSON.stringify( this.citymodel );
 
 			this.download( "citymodel.json", text );
+
+		},
+		getMaterialThemes( citymodel ) {
+
+			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
+
+				const [ , obj ] = cityobject;
+
+				if ( obj.geometry ) {
+
+					return obj.geometry.map( geom => {
+
+						if ( geom.material ) {
+
+							return Object.keys( geom.material );
+
+						} else {
+
+							return [];
+
+						}
+
+					} );
+
+				} else {
+
+					return [];
+
+				}
+
+
+			} ).flat( 2 );
+
+			return [ ... new Set( themes ) ];
+
+		},
+		onLoadComplete() {
+
+			this.materialThemes = this.getMaterialThemes( this.citymodel );
 
 		}
 	}
