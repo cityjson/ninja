@@ -14,6 +14,12 @@ You can run `ninja` without installation by visiting [ninja.cityjson.org](https:
 
 ## Installation
 
+Initialize the [cityjson-vue-components](https://github.com/cityjson/cityjson-vue-components) git submodule:
+```
+git submodule init
+git submodule update
+```
+
 Install all dependencies:
 
 ```
