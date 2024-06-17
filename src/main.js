@@ -1,17 +1,16 @@
 import Vue from 'vue';
 import App from './App.vue';
-import CityJSONComponents from '../cityjson-vue-components/src/entry';
 import Vue2Filters from 'vue2-filters';
 
-Vue.use( CityJSONComponents );
-Vue.use( Vue2Filters );
+import '@fortawesome/fontawesome-free/css/all.css';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 
-import '@fortawesome/fontawesome-free/css/all.css';
 
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
+
+Vue.use( Vue2Filters );
 
 new Vue( {
 	render: h => h( App ),

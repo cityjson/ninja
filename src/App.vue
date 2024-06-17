@@ -515,21 +515,6 @@
                 </div>
               </div>
             </div>
-            <div
-              v-if="has_versions"
-              v-show="active_sidebar == 'versions'"
-              class="p-3"
-            >
-              <branch-selector
-                v-model="active_branch"
-                :versioning="citymodel.versioning"
-              ></branch-selector>
-              <version-list
-                :versioning="citymodel.versioning"
-                :active_branch="active_branch"
-                :active_version.sync="active_version"
-              ></version-list>
-            </div>
           </div>
           <div class="col-7 p-0 h-100">
             <div
@@ -645,7 +630,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.6.1</a>
+                ><i class="fab fa-github"></i> ninja v0.7.0</a>
               </div>
             </div>
           </div>
@@ -704,9 +689,10 @@
 <script>
 import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
-import BranchSelector from './components/Versioning/BranchSelector.vue';
-import VersionList from './components/Versioning/VersionList.vue';
 import { AttributeEvaluator, TextureManager } from 'cityjson-threejs-loader';
+import CityObjectCard from './lib-components/CityObjectCard.vue';
+import CityObjectsTree from './lib-components/CityObjectsTree.vue';
+import ThreeJsViewer from './lib-components/ThreeJsViewer.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -715,8 +701,9 @@ export default {
 	components: {
 		ColorEditor,
 		NinjaSidebar,
-		BranchSelector,
-		VersionList
+		ThreeJsViewer,
+		CityObjectsTree,
+		CityObjectCard
 	},
 	data: function () {
 
