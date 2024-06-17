@@ -87,6 +87,30 @@
                 for="cameraLightSwitch"
               >Camera light</label>
             </div>
+            <div class="form-group row custom-control custom-switch ml-1">
+              <input
+                id="doubleSideSwitch"
+                v-model="doubleSide"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="doubleSideSwitch"
+              >Double side</label>
+            </div>
+            <div class="form-group row custom-control custom-switch ml-1">
+              <input
+                id="performanceModeSwitch"
+                v-model="performanceMode"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="performanceModeSwitch"
+              >Performance mode</label>
+            </div>
             <ColorEditor
               v-model="background_color"
               name="Background"
@@ -104,7 +128,7 @@
                   id="headingOne"
                   class="card-header"
                 >
-                  <h2 class="mb-0">
+                  <h4 class="mb-0">
                     <button
                       class="btn btn-link btn-block text-left collapsed"
                       type="button"
@@ -115,7 +139,7 @@
                     >
                       Object Colours
                     </button>
-                  </h2>
+                  </h4>
                 </div>
 
                 <div
@@ -139,7 +163,7 @@
                   id="headingTwo"
                   class="card-header"
                 >
-                  <h2 class="mb-0">
+                  <h4 class="mb-0">
                     <button
                       class="btn btn-link btn-block text-left collapsed"
                       type="button"
@@ -150,7 +174,7 @@
                     >
                       Surface Colours
                     </button>
-                  </h2>
+                  </h4>
                 </div>
                 <div
                   id="collapseTwo"
@@ -168,7 +192,203 @@
                   </div>
                 </div>
               </div>
+              <div class="card">
+                <div
+                  id="headingThree"
+                  class="card-header"
+                >
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseThree"
+                      aria-expanded="false"
+                      aria-controls="collapseThree"
+                    >
+                      Conditional formatting
+                    </button>
+                  </h5>
+                </div>
+                <div
+                  id="collapseThree"
+                  class="collapse"
+                  aria-labelledby="headingThree"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <div class="form-group row custom-control custom-switch ml-1">
+                      <input
+                        id="conditionalFormattingSwitch"
+                        v-model="conditionalFormatting"
+                        type="checkbox"
+                        class="custom-control-input"
+                      >
+                      <label
+                        class="custom-control-label"
+                        for="conditionalFormattingSwitch"
+                      >Show</label>
+                    </div>
+                    <div class="form-group">
+                      <label for="conditionalAttributeSelect">Attribute</label>
+                      <select
+                        id="conditionalAttributeSelect"
+                        class="form-control"
+                        @change="conditionalAttribute = $event.target.value"
+                      >
+                        <option value=""></option>
+                        <option
+                          v-for="attribute in conditionalAttributes"
+                          :key="attribute"
+                        >
+                          {{ attribute }}
+                        </option>
+                      </select>
+                    </div>
+                    <ColorEditor
+                      v-for="(color, type) in attributeColors"
+                      :key="type"
+                      v-model="attributeColors[type]"
+                      :name="type"
+                    ></ColorEditor>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div
+                  id="headingAppearance"
+                  class="card-header"
+                >
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link btn-block text-left collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseAppearance"
+                      aria-expanded="false"
+                      aria-controls="collapseAppearance"
+                    >
+                      Appearance
+                    </button>
+                  </h5>
+                </div>
+                <div
+                  id="collapseAppearance"
+                  class="collapse"
+                  aria-labelledby="headingAppearance"
+                  data-parent="#accordionExample"
+                >
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="materialThemeSelect">Material theme</label>
+                      <select
+                        id="materialThemeSelect"
+                        class="form-control"
+                        @change="activeMaterialTheme = $event.target.value"
+                      >
+                        <option value="undefined"></option>
+                        <option
+                          v-for="theme of materialThemes"
+                          :key="theme"
+                        >
+                          {{ theme }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="textureThemeSelect">Texture theme</label>
+                      <select
+                        id="textureThemeSelect"
+                        class="form-control"
+                        @change="activeTextureTheme = $event.target.value"
+                      >
+                        <option value="undefined"></option>
+                        <option
+                          v-for="theme of textureThemes"
+                          :key="theme"
+                        >
+                          {{ theme }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="textureThemeSelect">Textures ({{ resolvedTextures }} / {{ totalTextures }})</label>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-image mr-1"></i> Textures</span>
+                        </div>
+                        <div class="custom-file">
+                          <input
+                            id="inputGroupFile01"
+                            ref="textureFile"
+                            type="file"
+                            class="custom-file-input"
+                            multiple="multiple"
+                            @change="uploadTexture"
+                          >
+                          <label
+                            class="custom-file-label"
+                            for="inputGroupFile01"
+                          >Choose file or drop it here...</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="performanceModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="performanceModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-white">
+            <h5
+              id="performanceModalLabel"
+              class="modal-title"
+            >
+              <i class="fas fa-exclamation-triangle mr-1"></i> Performance mode
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+          </div>
+          <div class="modal-body">
+            You are about to disable performance mode. This might temporarily
+            make your browser unresponsive while the object list is populated.
+            Depending on your model's size, this might take a few seconds.
+
+            Are you sure you want to disable performance mode?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-dismiss="modal"
+              @click="performanceMode = false"
+            >
+              Go ahead, I am prepared!
+            </button>
           </div>
         </div>
       </div>
@@ -182,9 +402,16 @@
         :class="[ file_loaded ? 'text-white' : 'text-dark' ]"
         href="#"
       ><img
-        :src="logoUrl"
-        :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"
-      > <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
+         v-if=" !file_loaded "
+         :src="require('url:../public/logoBlack.svg')"
+         class="logo-big"
+       >
+        <img
+          v-else
+          :src="require('url:../public/logoWhite.svg')"
+          class="logo-regular"
+        >
+        <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div
           v-show="loading"
@@ -268,28 +495,44 @@
                   </div>
                 </div>
                 <CityObjectsTree
+                  v-if="! performanceMode"
                   :citymodel="activeCityModel"
                   :cityobjects="firstLevelObjects"
                   :selected_objid="selected_objid"
                   :matches="matches"
                   @object_clicked="move_to_object( [ $event, - 1, - 1 ] )"
                 ></CityObjectsTree>
+                <div
+                  v-else
+                  class="p-2"
+                >
+                  <div
+                    class="alert alert-warning"
+                    role="alert"
+                  >
+                    <h4 class="alert-heading">
+                      Performance mode!
+                    </h4>
+
+                    ninja detected that you have a large number of objects,
+                    therefore you are currently in performance mode. In this
+                    mode, the object list is disabled and certain features may
+                    not work properly. You can still use the 3D view and select
+                    objects.
+                    <hr>
+                    You can choose to disable performance mode at your own risk by
+                    clicking on the button below!
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    data-toggle="modal"
+                    data-target="#performanceModal"
+                  >
+                    Disable performance mode
+                  </button>
+                </div>
               </div>
-            </div>
-            <div
-              v-if="has_versions"
-              v-show="active_sidebar == 'versions'"
-              class="p-3"
-            >
-              <branch-selector
-                v-model="active_branch"
-                :versioning="citymodel.versioning"
-              ></branch-selector>
-              <version-list
-                :versioning="citymodel.versioning"
-                :active_branch="active_branch"
-                :active_version.sync="active_version"
-              ></version-list>
             </div>
           </div>
           <div class="col-7 p-0 h-100">
@@ -324,9 +567,20 @@
               :active-lod="activeLoD"
               :camera-spotlight="cameraLight"
               :highlight-selected-surface="highlightSurface"
+              :conditional-formatting="conditionalFormatting"
+              :conditional-attribute="conditionalAttribute"
+              :attribute-colors="attributeColors"
+              :active-material-theme="activeMaterialTheme"
+              :texture-manager="textureManager"
+              :active-texture-theme="activeTextureTheme"
+              :double-side="doubleSide"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
+              @loadCompleted="onLoadComplete()"
               @chunkLoaded="availableLoDs = $refs.viewer.getLods()"
+              @objectColorsChanged="object_colors = $event"
+              @surfaceColorsChanged="surface_colors = $event"
+              @attributeColorsChanged="attributeColors = $event"
             ></ThreeJsViewer>
             <div
               style="position: absolute; z-index: 1; bottom: 0px; left: 0px"
@@ -396,7 +650,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.6.1</a>
+                ><i class="fab fa-github"></i> ninja v0.8.0</a>
               </div>
             </div>
           </div>
@@ -455,8 +709,10 @@
 <script>
 import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
-import BranchSelector from './components/Versioning/BranchSelector.vue';
-import VersionList from './components/Versioning/VersionList.vue';
+import { AttributeEvaluator, TextureManager } from 'cityjson-threejs-loader';
+import CityObjectCard from './lib-components/CityObjectCard.vue';
+import CityObjectsTree from './lib-components/CityObjectsTree.vue';
+import ThreeJsViewer from './lib-components/ThreeJsViewer.vue';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -465,8 +721,9 @@ export default {
 	components: {
 		ColorEditor,
 		NinjaSidebar,
-		BranchSelector,
-		VersionList
+		ThreeJsViewer,
+		CityObjectsTree,
+		CityObjectCard
 	},
 	data: function () {
 
@@ -521,7 +778,17 @@ export default {
 			highlightSurface: false,
 			availableLoDs: [],
 			activeLoD: - 1,
-			cameraLight: false
+			cameraLight: false,
+			doubleSide: true,
+			performanceMode: false,
+			conditionalFormatting: false,
+			conditionalAttribute: '',
+			attributeColors: {},
+			materialThemes: [],
+			activeMaterialTheme: 'undefined',
+			textureManager: null,
+			textureThemes: [],
+			activeTextureTheme: 'undefined'
 		};
 
 	},
@@ -576,17 +843,60 @@ export default {
 
 			return this.selected_objid != null;
 
-		}
-	},
-	watch: {
-		selected_objid: function () {
+		},
+		conditionalAttributes: function () {
 
-			if ( this.selected_objid != null ) {
+			if ( ! this.citymodel.CityObjects ) {
 
-				var card_id = $.escapeSelector( this.selected_objid );
-				$( `#${card_id}` )[ 0 ].scrollIntoViewIfNeeded();
+				return [];
 
 			}
+
+			const attributes = new Set( Object.keys( this.citymodel.CityObjects ).map( objId => {
+
+				const cityobject = this.citymodel.CityObjects[ objId ];
+
+				if ( cityobject.attributes ) {
+
+					return Object.keys( cityobject.attributes );
+
+				}
+
+				return [];
+
+			} ).flat() );
+
+			const atts = [ ...attributes ].filter( a => {
+
+				const evaluator = new AttributeEvaluator( this.citymodel, a, false );
+
+				return evaluator.getUniqueValues().length > 1 && evaluator.getUniqueValues().length < 20;
+
+			} );
+
+			return atts;
+
+		},
+		totalTextures: function () {
+
+			if ( this.textureManager ) {
+
+				return this.textureManager.totalTextures;
+
+			}
+
+			return 0;
+
+		},
+		resolvedTextures: function () {
+
+			if ( this.textureManager ) {
+
+				return this.textureManager.resolvedTextures;
+
+			}
+
+			return 0;
 
 		}
 	},
@@ -668,6 +978,17 @@ export default {
 			return true;
 
 		},
+		uploadTexture() {
+
+			const files = this.$refs.textureFile.files;
+
+			for ( const file in files ) {
+
+				this.textureManager.setTextureFromFile( files[ file ] );
+
+			}
+
+		},
 		selectedFile() {
 
 			this.loading = true;
@@ -694,7 +1015,9 @@ export default {
 
 				}
 
-				this.citymodel = cm;
+				this.performanceMode = Object.keys( cm.CityObjects ).length > 10000;
+
+				this.citymodel = this.performanceMode ? Object.freeze( cm ) : cm;
 
 				this.has_versions = "versioning" in cm;
 
@@ -724,6 +1047,81 @@ export default {
 			var text = JSON.stringify( this.citymodel );
 
 			this.download( "citymodel.json", text );
+
+		},
+		getMaterialThemes( citymodel ) {
+
+			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
+
+				const [ , obj ] = cityobject;
+
+				if ( obj.geometry ) {
+
+					return obj.geometry.map( geom => {
+
+						if ( geom.material ) {
+
+							return Object.keys( geom.material );
+
+						} else {
+
+							return [];
+
+						}
+
+					} );
+
+				} else {
+
+					return [];
+
+				}
+
+
+			} ).flat( 2 );
+
+			return [ ... new Set( themes ) ];
+
+		},
+		getTextureThemes( citymodel ) {
+
+			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
+
+				const [ , obj ] = cityobject;
+
+				if ( obj.geometry ) {
+
+					return obj.geometry.map( geom => {
+
+						if ( geom.texture ) {
+
+							return Object.keys( geom.texture );
+
+						} else {
+
+							return [];
+
+						}
+
+					} );
+
+				} else {
+
+					return [];
+
+				}
+
+
+			} ).flat( 2 );
+
+			return [ ... new Set( themes ) ];
+
+		},
+		onLoadComplete() {
+
+			this.materialThemes = this.getMaterialThemes( this.citymodel );
+			this.textureThemes = this.getTextureThemes( this.citymodel );
+			this.textureManager = new TextureManager( this.citymodel );
 
 		}
 	}
