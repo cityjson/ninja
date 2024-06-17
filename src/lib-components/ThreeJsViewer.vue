@@ -618,6 +618,7 @@ export default {
 			viewer.appendChild( this.renderer.domElement );
 			this.renderer.setSize( viewer.clientWidth, viewer.clientHeight );
 			this.renderer.setClearColor( this.backgroundColor );
+			this.renderer.setPixelRatio( window.devicePixelRatio );
 			// this.renderer.shadowMap.enabled = true;
 			// this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -629,7 +630,7 @@ export default {
 
 			//add AmbientLight (light that is only there that there's a minimum of light and you can see color)
 			//kind of the natural daylight
-			var am_light = new THREE.AmbientLight( 0x666666, 0.7 ); // soft white light
+			var am_light = new THREE.AmbientLight( 0xffffff, 0.7 ); // soft white light
 			this.scene.add( am_light );
 
 			// Add directional light
