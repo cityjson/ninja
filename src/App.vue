@@ -89,6 +89,18 @@
             </div>
             <div class="form-group row custom-control custom-switch ml-1">
               <input
+                id="doubleSideSwitch"
+                v-model="doubleSide"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label
+                class="custom-control-label"
+                for="doubleSideSwitch"
+              >Double side</label>
+            </div>
+            <div class="form-group row custom-control custom-switch ml-1">
+              <input
                 id="performanceModeSwitch"
                 v-model="performanceMode"
                 type="checkbox"
@@ -554,6 +566,7 @@
               :active-material-theme="activeMaterialTheme"
               :texture-manager="textureManager"
               :active-texture-theme="activeTextureTheme"
+              :double-side="doubleSide"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -759,6 +772,7 @@ export default {
 			availableLoDs: [],
 			activeLoD: - 1,
 			cameraLight: false,
+			doubleSide: true,
 			performanceMode: false,
 			conditionalFormatting: false,
 			conditionalAttribute: '',

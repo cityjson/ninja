@@ -8,7 +8,7 @@
 <script>
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { AttributeEvaluator, CityJSONLoader, CityJSONWorkerParser, TextureManager } from 'cityjson-threejs-loader';
+import { AttributeEvaluator, CityJSONLoader, CityJSONWorkerParser, CityObjectsMaterial, TextureManager } from 'cityjson-threejs-loader';
 import { SRGBColorSpace } from 'three';
 
 export default {
@@ -93,6 +93,10 @@ export default {
 			default: 0xd9eefc
 		},
 		showSemantics: {
+			type: Boolean,
+			default: true
+		},
+		doubleSide: {
 			type: Boolean,
 			default: true
 		},
@@ -199,6 +203,21 @@ export default {
 
 		},
 		selectedBoundaryIdx: function () {
+
+			this.updateScene();
+
+		},
+		doubleSide: function () {
+
+			this.scene.traverse( c => {
+
+				if ( c.material && c.material.isCityObjectsMaterial ) {
+
+					c.material.side = this.doubleSide ? THREE.DoubleSide : THREE.FrontSide;
+
+				}
+
+			} );
 
 			this.updateScene();
 
@@ -386,6 +405,16 @@ export default {
 
 					scope.$emit( 'rendering', false );
 					scope.$emit( 'loadCompleted' );
+
+					scope.scene.traverse( c => {
+
+						if ( c.isCityObject ) {
+
+							c.material.side = this.doubleSide ? THREE.DoubleSide : THREE.FrontSide;
+
+						}
+
+					} );
 
 				};
 
