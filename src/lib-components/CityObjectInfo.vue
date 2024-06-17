@@ -23,7 +23,10 @@
           aria-label="Close"
           @click="$emit('close')"
         >
-          <span aria-hidden="true"><i class="fas fa-times small"></i></span>
+          <span
+            aria-hidden="true"
+            class="small"
+          ><i class="fas fa-times"></i></span>
         </button>
       </div>
     </div>
