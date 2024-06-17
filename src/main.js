@@ -7,7 +7,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 
-
 // Vue.config.productionTip = false;
 
 Vue.use( Vue2Filters );

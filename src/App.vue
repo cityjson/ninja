@@ -402,9 +402,16 @@
         :class="[ file_loaded ? 'text-white' : 'text-dark' ]"
         href="#"
       ><img
-        :src="logoUrl"
-        :class="[ file_loaded ? 'logo-regular' : 'logo-big' ]"
-      > <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
+         v-if=" !file_loaded "
+         :src="require('url:../public/logoBlack.svg')"
+         class="logo-big"
+       >
+        <img
+          v-else
+          :src="require('url:../public/logoWhite.svg')"
+          class="logo-regular"
+        >
+        <span :class="{ 'text-big' : !file_loaded }">ninja</span></a>
       <div class="d-flex justify-content-end align-items-center col-auto p-0">
         <div
           v-show="loading"
@@ -643,7 +650,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.7.0</a>
+                ><i class="fab fa-github"></i> ninja v0.8.0</a>
               </div>
             </div>
           </div>
