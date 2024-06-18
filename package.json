@@ -23,6 +23,7 @@
     "@vue/component-compiler-utils": "^3.3.0",
     "autoprefixer": "^10.4.4",
     "babel-eslint": "^10.1.0",
+    "buffer": "^6.0.3",
     "concurrently": "^6.5.1",
     "eslint": "^7.24.0",
     "eslint-config-mdcs": "^5.0.0",
@@ -34,5 +35,8 @@
     "static-server": "^2.2.1",
     "vue-hot-reload-api": "^2.3.4",
     "vue-template-compiler": "^2.6.11"
+  },
+  "@parcel/resolver-default": {
+    "packageExports": true
   }
 }

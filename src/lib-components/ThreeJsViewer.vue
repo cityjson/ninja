@@ -10,6 +10,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { AttributeEvaluator, CityJSONLoader, CityJSONWorkerParser, CityObjectsMaterial, TextureManager } from 'cityjson-threejs-loader';
 import { SRGBColorSpace } from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { GTAOPass, OutputPass, RenderPass } from 'three/examples/jsm/Addons.js';
+import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
 export default {
 	name: 'ThreeJsViewer',
@@ -360,6 +363,7 @@ export default {
 		this.raycaster = null;
 		this.mouse = null;
 		this.spotLight = null;
+		this.composer = null;
 
 	},
 	mounted() {
@@ -507,7 +511,8 @@ export default {
 
 			} );
 
-			this.renderer.render( this.scene, this.camera );
+			// this.renderer.render( this.scene, this.camera );
+			this.composer.render();
 
 		},
 		refreshColors() {
@@ -629,6 +634,22 @@ export default {
 			}
 
 		},
+		getParams() {
+
+			const hash = window.location.hash;
+
+			if ( hash ) {
+
+				const params = new URLSearchParams( hash.substring( 1 ) );
+				return Object.fromEntries( params );
+
+			} else {
+
+				return {};
+
+			}
+
+		},
 		initScene() {
 
 			const viewer = document.getElementById( "viewer" );
@@ -648,30 +669,67 @@ export default {
 			this.renderer.setSize( viewer.clientWidth, viewer.clientHeight );
 			this.renderer.setClearColor( this.backgroundColor );
 			this.renderer.setPixelRatio( window.devicePixelRatio );
-			// this.renderer.shadowMap.enabled = true;
-			// this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+			const composer = new EffectComposer( this.renderer );
+			this.composer = composer;
+
+			const renderPass = new RenderPass( this.scene, this.camera );
+			composer.addPass( renderPass );
+
+			const gtaoPass = new GTAOPass( this.scene, this.camera, viewer.clientWidth, viewer.clientHeight );
+
+			const aoParameters = {
+				radius: 2.4,
+				distanceExponent: 1.,
+				thickness: 10.,
+				scale: 1.3,
+				samples: 16,
+				distanceFallOff: 1.,
+				screenSpaceRadius: false,
+			};
+
+			gtaoPass.updateGtaoMaterial( aoParameters );
+
+			composer.addPass( gtaoPass );
+
+			const outputPass = new OutputPass();
+			composer.addPass( outputPass );
+
+			const updateGtaoMaterial = () => {
+
+				gtaoPass.updateGtaoMaterial( aoParameters );
+				this.updateScene();
+
+			};
+
+			if ( "debug" in this.getParams() ) {
+
+				const gui = new GUI();
+
+				gui.add( gtaoPass, 'blendIntensity' ).min( 0 ).max( 1 ).step( 0.01 );
+				gui.add( aoParameters, 'radius' ).min( 0.01 ).max( 10 ).step( 0.1 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'distanceExponent' ).min( 1 ).max( 4 ).step( 0.01 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'thickness' ).min( 0.01 ).max( 10 ).step( 0.1 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'distanceFallOff' ).min( 0 ).max( 1 ).step( 0.01 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'scale' ).min( 0.01 ).max( 2.0 ).step( 0.1 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'samples' ).min( 2 ).max( 32 ).step( 1 ).onChange( updateGtaoMaterial );
+				gui.add( aoParameters, 'screenSpaceRadius' ).onChange( updateGtaoMaterial );
+
+			}
 
 			let self = this;
 
-			// add raycaster and mouse (for clickable objects)
 			this.raycaster = new THREE.Raycaster();
 			this.mouse = new THREE.Vector2();
 
-			//add AmbientLight (light that is only there that there's a minimum of light and you can see color)
-			//kind of the natural daylight
-			var am_light = new THREE.AmbientLight( 0xffffff, 0.7 ); // soft white light
-			this.scene.add( am_light );
+			const ambientLight = new THREE.AmbientLight( 0x999999, 0.7 * Math.PI ); // soft white light
+			this.scene.add( ambientLight );
 
-			// Add directional light
-			this.spotLight = new THREE.DirectionalLight( 0xDDDDDD );
+			this.spotLight = new THREE.DirectionalLight( 0xDDDDDD, Math.PI );
 			this.spotLight.position.set( 1, 2, 3 );
-			this.spotLight.target = this.scene;
-			// this.spotLight.castShadow = true;
-			// spot_light.intensity = 0.4;
-			// spot_light.position.normalize();
+
 			this.scene.add( this.spotLight );
 
-			//render & orbit controls
 			this.controls = new OrbitControls( this.camera, this.renderer.domElement );
 			this.controls.addEventListener( 'change', function () {
 
