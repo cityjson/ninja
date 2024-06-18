@@ -14,35 +14,29 @@ You can run `ninja` without installation by visiting [ninja.cityjson.org](https:
 
 ## Installation
 
-Initialize the [cityjson-vue-components](https://github.com/cityjson/cityjson-vue-components) git submodule:
-```
-git submodule init
-git submodule update
-```
-
 Install all dependencies:
 
 ```
-yarn install
+npm install
 ```
 
 ### Compile and run for development
 
 ```
-yarn run dev
+npm start
 ```
 
-You can visit the local version at: [http://localhost:9080/dist/index.html](http://localhost:9080/dist/index.html).
+You can visit the local version at: [http://localhost:1234/](http://localhost:1234).
 
 ### Compile and run for production
 
 ```
-yarn run build
+npm run build
 ```
 
 # Dependencies
 
-*ninja* uses [cityjson-vue-components](https://github.com/cityjson/cityjson-vue-components) and [cityjson-threejs-loader](https://github.com/cityjson/cityjson-threejs-loader) to handle things.
+*ninja* uses [cityjson-threejs-loader](https://github.com/cityjson/cityjson-threejs-loader) to handle things.
 
 Other frameworks used:
 - [three.js](https://threejs.org/)
