@@ -1,4 +1,4 @@
-# ![ninja logo](logo_small.png) ninja
+# ![ninja logo](images/logo_small.png) ninja
 
 ![](images/screenshot-3dbag.png)
 
