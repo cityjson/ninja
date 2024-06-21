@@ -574,6 +574,7 @@
               :texture-manager="textureManager"
               :active-texture-theme="activeTextureTheme"
               :double-side="doubleSide"
+              :ambient-occlusion="ambientOcclusion"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -608,6 +609,18 @@
                   class="custom-control-label"
                   for="semanticsSwitch"
                 >Semantics</label>
+              </div>
+              <div class="custom-control custom-switch ml-1">
+                <input
+                  id="ambientOcclussionSwitch"
+                  v-model="ambientOcclusion"
+                  type="checkbox"
+                  class="custom-control-input"
+                >
+                <label
+                  class="custom-control-label"
+                  for="ambientOcclussionSwitch"
+                >Ambient Occlusion</label>
               </div>
               <div
                 class="btn-group ml-1 mb-1 bg-white"
@@ -780,6 +793,7 @@ export default {
 			activeLoD: - 1,
 			cameraLight: false,
 			doubleSide: true,
+			ambientOcclusion: false,
 			performanceMode: false,
 			conditionalFormatting: false,
 			conditionalAttribute: '',

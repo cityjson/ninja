@@ -103,6 +103,10 @@ export default {
 			type: Boolean,
 			default: true
 		},
+		ambientOcclusion: {
+			type: Boolean,
+			default: true
+		},
 		activeLod: {
 			type: Number,
 			default: - 1
@@ -221,6 +225,21 @@ export default {
 				}
 
 			} );
+
+			this.updateScene();
+
+		},
+		ambientOcclusion: function () {
+
+			if ( this.ambientOcclusion ) {
+
+				this.composer.addPass( this.gtaoPass );
+
+			} else {
+
+				this.composer.removePass( this.gtaoPass );
+
+			}
 
 			this.updateScene();
 
@@ -363,6 +382,7 @@ export default {
 		this.raycaster = null;
 		this.mouse = null;
 		this.spotLight = null;
+		this.gtaoPass = null;
 		this.composer = null;
 
 	},
@@ -676,7 +696,7 @@ export default {
 			const renderPass = new RenderPass( this.scene, this.camera );
 			composer.addPass( renderPass );
 
-			const gtaoPass = new GTAOPass( this.scene, this.camera, viewer.clientWidth, viewer.clientHeight );
+			this.gtaoPass = new GTAOPass( this.scene, this.camera, viewer.clientWidth, viewer.clientHeight );
 
 			const aoParameters = {
 				radius: 2.4,
@@ -688,9 +708,13 @@ export default {
 				screenSpaceRadius: false,
 			};
 
-			gtaoPass.updateGtaoMaterial( aoParameters );
+			this.gtaoPass.updateGtaoMaterial( aoParameters );
 
-			composer.addPass( gtaoPass );
+			if ( this.ambientOcclusion ) {
+
+				composer.addPass( this.gtaoPass );
+
+			}
 
 			const outputPass = new OutputPass();
 			composer.addPass( outputPass );
