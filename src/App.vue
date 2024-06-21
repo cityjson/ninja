@@ -663,7 +663,7 @@
                   class="card-link"
                   href="https://github.com/cityjson/ninja"
                   target="_blank"
-                ><i class="fab fa-github"></i> ninja v0.8.1</a>
+                ><i class="fab fa-github"></i> ninja v0.8.2</a>
               </div>
             </div>
           </div>
