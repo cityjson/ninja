@@ -7,9 +7,10 @@
     "build": "parcel build public/index.html --public-url . --no-cache"
   },
   "dependencies": {
+    "@cityjson/cjseq": "^0.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "bootstrap": "^4.6.1",
     "cityjson-threejs-loader": "github:cityjson/cityjson-threejs-loader#develop",
+    "bootstrap": "^4.6.1",
     "earcut": "^2.2.2",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
