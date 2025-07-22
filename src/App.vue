@@ -467,7 +467,7 @@
                       Version: {{ active_version | truncate(7) }}
                     </span>
                     <span class="badge badge-secondary">
-                      {{ Object.keys(activeCityModel.CityObjects).length }} total
+                      {{ (activeCityModel && activeCityModel.CityObjects) ? Object.keys(activeCityModel.CityObjects).length : 0 }} total
                     </span>
                   </h5>
                   <input
@@ -575,6 +575,7 @@
               :active-texture-theme="activeTextureTheme"
               :double-side="doubleSide"
               :ambient-occlusion="ambientOcclusion"
+              :file-type="file_type"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -678,7 +679,7 @@
         <div class="row">
           <main class="col-12 py-md-3 pl-md-5">
             <h2>File upload</h2>
-            <p>Upload a CityJSON file to have fun!</p>
+            <p>Upload a CityJSON (.json) or CityJSONSeq (.jsonl) file to have fun!</p>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-upload mr-1"></i> Upload</span>
@@ -689,6 +690,7 @@
                   ref="cityJSONFile"
                   type="file"
                   class="custom-file-input"
+                  accept=".json,.jsonl"
                   @change="selectedFile"
                 >
                 <label
@@ -726,6 +728,7 @@ import { AttributeEvaluator, TextureManager } from 'cityjson-threejs-loader';
 import CityObjectCard from './lib-components/CityObjectCard.vue';
 import CityObjectsTree from './lib-components/CityObjectsTree.vue';
 import ThreeJsViewer from './lib-components/ThreeJsViewer.vue';
+import { CityJSONSeqUtils } from './helpers/cjseq';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -749,6 +752,7 @@ export default {
 			selectedBoundaryId: - 1,
 			loading: false,
 			error_message: null,
+			file_type: "json",
 			active_sidebar: 'objects', // objects/versions
 			has_versions: false,
 			active_branch: 'master',
@@ -860,7 +864,7 @@ export default {
 		},
 		conditionalAttributes: function () {
 
-			if ( ! this.citymodel.CityObjects ) {
+			if ( ! this.citymodel || ! this.citymodel.CityObjects ) {
 
 				return [];
 
@@ -870,7 +874,7 @@ export default {
 
 				const cityobject = this.citymodel.CityObjects[ objId ];
 
-				if ( cityobject.attributes ) {
+				if ( cityobject && cityobject.attributes && typeof cityobject.attributes === 'object' && cityobject.attributes !== null ) {
 
 					return Object.keys( cityobject.attributes );
 
@@ -958,6 +962,7 @@ export default {
 			this.citymodel = {};
 			this.search_term = "";
 			this.file_loaded = false;
+			this.file_type = "json";
 
 		},
 		matches( coid, cityobject ) {
@@ -981,7 +986,7 @@ export default {
 		},
 		validateCityJSON( cm ) {
 
-			if ( cm.type != "CityJSON" ) {
+			if ( cm.type !== "CityJSON" ) {
 
 				this.error_message = "This is not a CityJSON file!";
 
@@ -1003,14 +1008,33 @@ export default {
 			}
 
 		},
-		selectedFile() {
+		 selectedFile() {
 
 			this.loading = true;
+			let cm;
 
 			let file = this.$refs.cityJSONFile.files[ 0 ];
-			if ( ! file || file.type != "application/json" ) {
+			if ( ! file ) {
 
-				this.error_message = "This is not a JSON file!";
+				this.error_message = "No file selected!";
+				this.loading = false;
+				return;
+
+			}
+
+			// Determine file type based on extension
+			const fileName = file.name.toLowerCase();
+			if ( fileName.endsWith( '.json' ) ) {
+
+				this.file_type = "json";
+
+			} else if ( fileName.endsWith( '.jsonl' ) ) {
+
+				this.file_type = "jsonl";
+
+			} else {
+
+				this.error_message = "Please select a .json or .jsonl file!";
 				this.loading = false;
 				return;
 
@@ -1018,25 +1042,44 @@ export default {
 
 			let reader = new FileReader();
 			reader.readAsText( file, "UTF-8" );
-			reader.onload = evt => {
+			reader.onload = async evt => {
 
-				var cm = JSON.parse( evt.target.result );
+				const fileContent = evt.target.result;
 
-				if ( this.validateCityJSON( cm ) == false ) {
+				if ( this.file_type === "jsonl" ) {
 
-					this.loading = false;
-					return;
+					// For CityJSONSeq files, validate the first line
+					if ( CityJSONSeqUtils.validateCityJSONSeq( fileContent ) === false ) {
+
+						this.error_message = 'Invalid CityJSONSeq file';
+						this.loading = false;
+						return;
+
+					}
+
+					const util = new CityJSONSeqUtils();
+					cm = await util.toCityJSON( fileContent );
+
+				} else {
+
+					// For regular CityJSON files, parse and validate
+					cm = JSON.parse( fileContent );
+
+					if ( this.validateCityJSON( cm ) === false ) {
+
+						this.loading = false;
+						return;
+
+					}
 
 				}
 
+
 				this.performanceMode = Object.keys( cm.CityObjects ).length > 10000;
-
 				this.citymodel = this.performanceMode ? Object.freeze( cm ) : cm;
-
 				this.has_versions = "versioning" in cm;
 
 				this.file_loaded = true;
-
 				this.loading = false;
 
 			};
@@ -1065,15 +1108,21 @@ export default {
 		},
 		getMaterialThemes( citymodel ) {
 
+			if ( ! citymodel || ! citymodel.CityObjects ) {
+
+				return [];
+
+			}
+
 			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
 
 				const [ , obj ] = cityobject;
 
-				if ( obj.geometry ) {
+				if ( obj && obj.geometry && Array.isArray( obj.geometry ) ) {
 
 					return obj.geometry.map( geom => {
 
-						if ( geom.material ) {
+						if ( geom && geom.material ) {
 
 							return Object.keys( geom.material );
 
@@ -1099,15 +1148,21 @@ export default {
 		},
 		getTextureThemes( citymodel ) {
 
+			if ( ! citymodel || ! citymodel.CityObjects ) {
+
+				return [];
+
+			}
+
 			const themes = Object.entries( citymodel.CityObjects ).map( cityobject => {
 
 				const [ , obj ] = cityobject;
 
-				if ( obj.geometry ) {
+				if ( obj && obj.geometry && Array.isArray( obj.geometry ) ) {
 
 					return obj.geometry.map( geom => {
 
-						if ( geom.texture ) {
+						if ( geom && geom.texture ) {
 
 							return Object.keys( geom.texture );
 
