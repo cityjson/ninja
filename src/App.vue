@@ -578,6 +578,7 @@
               :file-type="file_type"
               :fcb-loader="fcbLoader"
               :is-flat-city-buf="isFlatCityBuf"
+              :flat-city-buf-url="flatCityBufUrl"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -783,6 +784,7 @@ export default {
 			fcbUrl: "",
 			fcbLoader: null,
 			isFlatCityBuf: false,
+			flatCityBufUrl: "",
 			active_sidebar: 'objects', // objects/versions
 			has_versions: false,
 			active_branch: 'master',
@@ -995,6 +997,7 @@ export default {
 			this.file_type = "json";
 			this.fcbUrl = "";
 			this.isFlatCityBuf = false;
+			this.flatCityBufUrl = "";
 
 			if ( this.fcbLoader ) {
 
@@ -1246,11 +1249,6 @@ export default {
 
 			try {
 
-				// Initialize FlatCityBuf loader
-				const parser = new CityJSONWorkerParser();
-				this.fcbLoader = new FlatCityBufLoader( parser );
-				await this.fcbLoader.setUrl( this.fcbUrl );
-
 				// Set up initial empty citymodel
 				this.citymodel = {
 					type: "CityJSON",
@@ -1261,6 +1259,7 @@ export default {
 
 				this.file_type = "fcb";
 				this.isFlatCityBuf = true;
+				this.flatCityBufUrl = this.fcbUrl;
 				this.file_loaded = true;
 				this.loading = false;
 

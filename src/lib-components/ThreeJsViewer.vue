@@ -139,8 +139,8 @@ export default {
 			type: String,
 			default: "undefined"
 		},
-		fcbLoader: {
-			type: Object,
+		flatCityBufUrl: {
+			type: String,
 			default: null
 		},
 		isFlatCityBuf: {
@@ -384,19 +384,7 @@ export default {
 			},
 			deep: true
 		},
-		isFlatCityBuf: function ( newVal ) {
 
-			if ( newVal ) {
-
-				this.setupFlatCityBuf();
-
-			} else {
-
-				this.clearFlatCityBuf();
-
-			}
-
-		}
 	},
 	beforeCreate() {
 
@@ -425,7 +413,7 @@ export default {
 
 	},
 	methods: {
-		loadCitymodel( citymodel ) {
+		async loadCitymodel( citymodel ) {
 
 			this.$emit( 'rendering', true );
 
@@ -469,9 +457,23 @@ export default {
 
 				};
 
+				let loader;
+				if ( this.isFlatCityBuf ) {
 
-				const loader = new CityJSONLoader( this.parser );
-				loader.load( citymodel );
+					loader = new FlatCityBufLoader( this.parser );
+					console.log( 'FlatCityBufUrl:', this.flatCityBufUrl );
+					await loader.setUrl( this.flatCityBufUrl );
+
+					await loader.load( );
+
+				} else {
+
+					loader = new CityJSONLoader( this.parser );
+					loader.load( citymodel );
+
+				}
+
+
 
 				const bbox = loader.boundingBox.clone();
 				bbox.applyMatrix4( loader.matrix );
