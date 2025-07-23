@@ -8,7 +8,7 @@
 <script>
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { AttributeEvaluator, CityJSONLoader, CityJSONWorkerParser, CityObjectsMaterial, TextureManager } from 'cityjson-threejs-loader';
+import { AttributeEvaluator, CityJSONLoader, CityJSONWorkerParser, CityObjectsMaterial, TextureManager, FlatCityBufLoader } from 'cityjson-threejs-loader';
 import { SRGBColorSpace } from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { GTAOPass, OutputPass, RenderPass } from 'three/examples/jsm/Addons.js';
@@ -139,6 +139,18 @@ export default {
 			type: String,
 			default: "undefined"
 		},
+		fcbLoader: {
+			type: Object,
+			default: null
+		},
+		isFlatCityBuf: {
+			type: Boolean,
+			default: false
+		},
+		fileType: {
+			type: String,
+			default: 'json'
+		}
 	},
 	data() {
 
@@ -371,6 +383,19 @@ export default {
 
 			},
 			deep: true
+		},
+		isFlatCityBuf: function ( newVal ) {
+
+			if ( newVal ) {
+
+				this.setupFlatCityBuf();
+
+			} else {
+
+				this.clearFlatCityBuf();
+
+			}
+
 		}
 	},
 	beforeCreate() {
@@ -405,6 +430,8 @@ export default {
 			this.$emit( 'rendering', true );
 
 			if ( Object.keys( citymodel ).length > 0 ) {
+
+				// TODO: add support for FlatCityBuf
 
 				this.parser = new CityJSONWorkerParser();
 				this.parser.chunkSize = 2000;
@@ -441,6 +468,7 @@ export default {
 					} );
 
 				};
+
 
 				const loader = new CityJSONLoader( this.parser );
 				loader.load( citymodel );

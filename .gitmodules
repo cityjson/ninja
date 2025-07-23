@@ -1,0 +1,3 @@
+[submodule "cityjson-threejs-loader"]
+	path = cityjson-threejs-loader
+	url = git@github.com:cityjson/cityjson-threejs-loader.git
