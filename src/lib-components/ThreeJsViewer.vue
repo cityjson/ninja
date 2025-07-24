@@ -946,8 +946,8 @@ export default {
 				// Use the FlatCityBufLoader to load data for the new bounding box
 				await this.flatCityBufLoader.load( dutchBoundingBox );
 
-				const bbox = this.flatCityBufLoader.boundingBox.clone();
-				bbox.applyMatrix4( this.flatCityBufLoader.matrix );
+				// const bbox = this.flatCityBufLoader.boundingBox.clone();
+				// bbox.applyMatrix4( this.flatCityBufLoader.matrix );
 
 				// this.fitCameraToSelection( this.camera, this.controls, bbox );
 
