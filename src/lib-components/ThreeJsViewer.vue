@@ -398,6 +398,7 @@ export default {
 		this.spotLight = null;
 		this.gtaoPass = null;
 		this.composer = null;
+		this.cameraUpdateDebounceTimer = null;
 
 	},
 	mounted() {
@@ -792,6 +793,31 @@ export default {
 				self.updateScene();
 
 			} );
+
+			// Add debounced camera movement handler for FlatCityBuf dynamic loading
+			this.controls.addEventListener( 'end', function () {
+
+				// Clear existing timer
+				if ( self.cameraUpdateDebounceTimer ) {
+
+					clearTimeout( self.cameraUpdateDebounceTimer );
+
+				}
+
+				// Set 1-second debounce timer
+				self.cameraUpdateDebounceTimer = setTimeout( function () {
+
+					if ( self.isFlatCityBuf && self.flatCityBufLoader ) {
+
+						console.log( 'Camera movement detected - triggering dynamic loading' );
+						self.handleCameraMovement();
+
+					}
+
+				}, 1000 );
+
+			} );
+
 			this.controls.target.set( 0, 0, 0 );
 
 			const scope = this;
@@ -805,6 +831,137 @@ export default {
 				scope.updateScene();
 
 			}, false );
+
+		},
+		handleCameraMovement() {
+
+			// Calculate camera-ground intersection point for dynamic loading
+			const intersectionPoint = this.calculateCameraGroundIntersection();
+
+			if ( intersectionPoint ) {
+
+				console.log( 'Camera-ground intersection point (Three.js coords):', intersectionPoint );
+
+				// Update dynamic extent visualization
+				this.flatCityBufLoader.updateDynamicExtentHelper( intersectionPoint );
+
+				// Transform intersection point to Dutch coordinates
+				const dutchIntersection = this.transformToOriginalCoordinates( intersectionPoint );
+				console.log( 'Camera-ground intersection point (Dutch coords):', dutchIntersection );
+
+				// Create 1000m bounding box around intersection point in Dutch coordinates
+				const dutchBoundingBox = this.create1000mBoundingBoxInDutchCoords( dutchIntersection );
+				console.log( '1000m bounding box (Dutch coords):', dutchBoundingBox );
+
+				// Trigger dynamic loading with the Dutch coordinate bounding box
+				this.loadDynamicData( dutchBoundingBox );
+
+			} else {
+
+				console.log( 'Camera ray does not intersect with ground plane' );
+
+			}
+
+		},
+		calculateCameraGroundIntersection() {
+
+			// Create ray from camera position in camera's forward direction
+			const camera = this.camera;
+			const direction = new THREE.Vector3( 0, 0, - 1 ).applyQuaternion( camera.quaternion );
+			const ray = new THREE.Ray( camera.position, direction );
+
+			// Create XZ plane (y=0 in Three.js coordinate system)
+			const plane = new THREE.Plane( new THREE.Vector3( 0, 1, 0 ), 0 );
+
+			// Calculate intersection point with the ground plane
+			const intersectionPoint = new THREE.Vector3();
+			const intersection = ray.intersectPlane( plane, intersectionPoint );
+
+			return intersection; // Returns Vector3 or null if no intersection
+
+		},
+		create1000mBoundingBox( intersectionPoint ) {
+
+			// Create 1000m × 1000m bounding box around intersection point
+			const centerX = intersectionPoint.x;
+			const centerZ = intersectionPoint.z; // Z is the other horizontal axis in Three.js
+
+			return {
+				minX: centerX - 500,
+				minZ: centerZ - 500,
+				maxX: centerX + 500,
+				maxZ: centerZ + 500
+			};
+
+		},
+		transformToOriginalCoordinates( point ) {
+
+			// Transform point from Three.js display coordinates to original Dutch coordinates
+			if ( ! this.flatCityBufLoader || ! this.flatCityBufLoader.originalTransform || ! this.flatCityBufLoader.matrix ) {
+
+				console.warn( 'FlatCityBuf loader or transform matrices not available' );
+				return point;
+
+			}
+
+			// First, reverse the display centering transformation
+			const displayInverse = this.flatCityBufLoader.matrix.clone().invert();
+			const uncenteredPoint = point.clone().applyMatrix4( displayInverse );
+
+			// Then, apply the original transform to get back to Dutch coordinates
+			const originalCoords = uncenteredPoint.clone().applyMatrix4( this.flatCityBufLoader.originalTransform );
+
+			return originalCoords;
+
+		},
+		create1000mBoundingBoxInDutchCoords( dutchIntersection ) {
+
+			// Create 1000m × 1000m bounding box in Dutch coordinate system
+			// Note: In Dutch RD system, X and Y are the horizontal axes
+			const centerX = dutchIntersection.x;
+			const centerY = dutchIntersection.y;
+
+			return {
+				minX: centerX - 500,
+				minY: centerY - 500,
+				maxX: centerX + 500,
+				maxY: centerY + 500
+			};
+
+		},
+		async loadDynamicData( dutchBoundingBox ) {
+
+			// Load new data based on camera position
+			if ( ! this.flatCityBufLoader ) {
+
+				console.warn( 'FlatCityBuf loader not available' );
+				return;
+
+			}
+
+			try {
+
+				console.log( 'Loading dynamic data for bbox:', dutchBoundingBox );
+
+				// Use the FlatCityBufLoader to load data for the new bounding box
+				await this.flatCityBufLoader.load( dutchBoundingBox );
+
+				const bbox = this.flatCityBufLoader.boundingBox.clone();
+				bbox.applyMatrix4( this.flatCityBufLoader.matrix );
+
+				// this.fitCameraToSelection( this.camera, this.controls, bbox );
+
+				this.scene.add( this.flatCityBufLoader.scene );
+
+
+				// The loader will automatically update the scene
+				this.updateScene();
+
+			} catch ( error ) {
+
+				console.error( 'Error loading dynamic FlatCityBuf data:', error );
+
+			}
 
 		},
 		clearScene() {
