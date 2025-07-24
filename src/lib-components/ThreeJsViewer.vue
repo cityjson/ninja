@@ -163,6 +163,7 @@ export default {
 				y: - 1
 			},
 			parser: null,
+			flatCityBufLoader: null,
 
 		};
 
@@ -419,7 +420,6 @@ export default {
 
 			if ( Object.keys( citymodel ).length > 0 ) {
 
-				// TODO: add support for FlatCityBuf
 
 				this.parser = new CityJSONWorkerParser();
 				this.parser.chunkSize = 2000;
@@ -461,6 +461,7 @@ export default {
 				if ( this.isFlatCityBuf ) {
 
 					loader = new FlatCityBufLoader( this.parser );
+					this.flatCityBufLoader = loader;
 					console.log( 'FlatCityBufUrl:', this.flatCityBufUrl );
 					await loader.setUrl( this.flatCityBufUrl );
 
@@ -481,6 +482,7 @@ export default {
 				this.fitCameraToSelection( this.camera, this.controls, bbox );
 
 				this.scene.add( loader.scene );
+
 
 			}
 
