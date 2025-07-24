@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "@cityjson/cjseq": "^0.0.1",
+    "@cityjson/flatcitybuf": "^0.1.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.6.1",
-    "cityjson-threejs-loader": "file:./cityjson-threejs-loader",
+    "cityjson-threejs-loader": "file:cityjson-threejs-loader",
     "earcut": "^2.2.2",
-    "fcb_wasm": "^0.1.0",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
