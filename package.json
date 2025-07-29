@@ -1,6 +1,6 @@
 {
   "name": "@cityjson/ninja",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "scripts": {
     "start": "parcel public/index.html",
     "build": "parcel build public/index.html --public-url . --no-cache"
