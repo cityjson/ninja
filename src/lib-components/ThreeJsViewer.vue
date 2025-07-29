@@ -492,12 +492,7 @@ export default {
 
 			// From https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/24
 
-			// const box.makeEmpty();
-			// for ( const object of selection ) {
 
-			//   box.expandByObject( object );
-
-			// }
 			const size = new THREE.Vector3();
 			const center = new THREE.Vector3();
 
@@ -945,11 +940,6 @@ export default {
 
 				// Use the FlatCityBufLoader to load data for the new bounding box
 				await this.flatCityBufLoader.load( dutchBoundingBox );
-
-				// const bbox = this.flatCityBufLoader.boundingBox.clone();
-				// bbox.applyMatrix4( this.flatCityBufLoader.matrix );
-
-				// this.fitCameraToSelection( this.camera, this.controls, bbox );
 
 				this.scene.add( this.flatCityBufLoader.scene );
 
