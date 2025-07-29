@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "start": "parcel public/index.html",
-    "build": "parcel build public/index.html --public-url . --no-cache"
+    "build": "parcel build public/index.html --public-url . --no-cache",
+    "update-loader": "npm install cityjson-threejs-loader@file:./cityjson-threejs-loader --force"
   },
   "dependencies": {
     "@cityjson/cjseq": "^0.0.1",
+    "@cityjson/flatcitybuf": "^0.1.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "cityjson-threejs-loader": "github:cityjson/cityjson-threejs-loader#develop",
     "bootstrap": "^4.6.1",
+    "cityjson-threejs-loader": "file:cityjson-threejs-loader",
     "earcut": "^2.2.2",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
@@ -39,5 +41,6 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

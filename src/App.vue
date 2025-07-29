@@ -576,6 +576,9 @@
               :double-side="doubleSide"
               :ambient-occlusion="ambientOcclusion"
               :file-type="file_type"
+              :fcb-loader="fcbLoader"
+              :is-flat-city-buf="isFlatCityBuf"
+              :flat-city-buf-url="flatCityBufUrl"
               @object_clicked="move_to_object($event)"
               @rendering="loading = $event"
               @loadCompleted="onLoadComplete()"
@@ -699,6 +702,31 @@
                 >Choose file or drop it here...</label>
               </div>
             </div>
+            <hr class="my-4">
+            <h2>FlatCityBuf URL</h2>
+            <p>Or enter a FlatCityBuf URL to stream 3D city data!</p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-link mr-1"></i> URL</span>
+              </div>
+              <input
+                v-model="fcbUrl"
+                type="url"
+                class="form-control"
+                placeholder="https://example.com/data.fcb"
+                @keyup.enter="loadFlatCityBuf"
+              >
+              <div class="input-group-append">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  :disabled="!fcbUrl || loading"
+                  @click="loadFlatCityBuf"
+                >
+                  Load
+                </button>
+              </div>
+            </div>
             <div
               v-show="error_message"
               class="alert alert-danger"
@@ -724,7 +752,7 @@
 <script>
 import ColorEditor from './components/ColorEditor.vue';
 import NinjaSidebar from './components/NinjaSidebar.vue';
-import { AttributeEvaluator, TextureManager } from 'cityjson-threejs-loader';
+import { AttributeEvaluator, TextureManager, FlatCityBufLoader, CityJSONWorkerParser } from 'cityjson-threejs-loader';
 import CityObjectCard from './lib-components/CityObjectCard.vue';
 import CityObjectsTree from './lib-components/CityObjectsTree.vue';
 import ThreeJsViewer from './lib-components/ThreeJsViewer.vue';
@@ -753,6 +781,10 @@ export default {
 			loading: false,
 			error_message: null,
 			file_type: "json",
+			fcbUrl: "",
+			fcbLoader: null,
+			isFlatCityBuf: false,
+			flatCityBufUrl: "",
 			active_sidebar: 'objects', // objects/versions
 			has_versions: false,
 			active_branch: 'master',
@@ -963,6 +995,16 @@ export default {
 			this.search_term = "";
 			this.file_loaded = false;
 			this.file_type = "json";
+			this.fcbUrl = "";
+			this.isFlatCityBuf = false;
+			this.flatCityBufUrl = "";
+
+			if ( this.fcbLoader ) {
+
+				this.fcbLoader.clear();
+				this.fcbLoader = null;
+
+			}
 
 		},
 		matches( coid, cityobject ) {
@@ -1191,6 +1233,43 @@ export default {
 			this.materialThemes = this.getMaterialThemes( this.citymodel );
 			this.textureThemes = this.getTextureThemes( this.citymodel );
 			this.textureManager = new TextureManager( this.citymodel );
+
+		},
+		async loadFlatCityBuf() {
+
+			if ( ! this.fcbUrl ) {
+
+				this.error_message = "Please enter a FlatCityBuf URL";
+				return;
+
+			}
+
+			this.loading = true;
+			this.error_message = null;
+
+			try {
+
+				// Set up initial empty citymodel
+				this.citymodel = {
+					type: "CityJSON",
+					version: "2.0",
+					CityObjects: {},
+					vertices: []
+				};
+
+				this.file_type = "fcb";
+				this.isFlatCityBuf = true;
+				this.flatCityBufUrl = this.fcbUrl;
+				this.file_loaded = true;
+				this.loading = false;
+
+			} catch ( error ) {
+
+				console.error( 'Error loading FlatCityBuf:', error );
+				this.error_message = `Failed to load FlatCityBuf: ${error.message}`;
+				this.loading = false;
+
+			}
 
 		}
 	}
