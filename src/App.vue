@@ -679,7 +679,7 @@
         <div class="row">
           <main class="col-12 py-md-3 pl-md-5">
             <h2>File upload</h2>
-            <p>Upload a CityJSON (.json) or CityJSONSeq (.jsonl) file to have fun!</p>
+            <p>Upload a CityJSON (.json), CityJSONSeq (.jsonl) or CityParquet (.parquet) file to have fun! For a CityParquet dataset split across several files you can select them all at once.</p>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-upload mr-1"></i> Upload</span>
@@ -690,7 +690,8 @@
                   ref="cityJSONFile"
                   type="file"
                   class="custom-file-input"
-                  accept=".json,.jsonl"
+                  accept=".json,.jsonl,.parquet"
+                  multiple="multiple"
                   @change="selectedFile"
                 >
                 <label
@@ -729,6 +730,7 @@ import CityObjectCard from './lib-components/CityObjectCard.vue';
 import CityObjectsTree from './lib-components/CityObjectsTree.vue';
 import ThreeJsViewer from './lib-components/ThreeJsViewer.vue';
 import { CityJSONSeqUtils } from './helpers/cjseq';
+import { CityParquetUtils } from './helpers/cityparquet';
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -1011,16 +1013,27 @@ export default {
 		 selectedFile() {
 
 			this.loading = true;
-			let cm;
+			this.error_message = null;
 
-			let file = this.$refs.cityJSONFile.files[ 0 ];
-			if ( ! file ) {
+			const files = Array.from( this.$refs.cityJSONFile.files || [] );
+			if ( files.length === 0 ) {
 
 				this.error_message = "No file selected!";
 				this.loading = false;
 				return;
 
 			}
+
+			// A CityParquet dataset may consist of several .parquet files.
+			const parquetFiles = files.filter( f => f.name.toLowerCase().endsWith( '.parquet' ) );
+			if ( parquetFiles.length > 0 ) {
+
+				this.loadCityParquet( parquetFiles );
+				return;
+
+			}
+
+			const file = files[ 0 ];
 
 			// Determine file type based on extension
 			const fileName = file.name.toLowerCase();
@@ -1034,7 +1047,7 @@ export default {
 
 			} else {
 
-				this.error_message = "Please select a .json or .jsonl file!";
+				this.error_message = "Please select a .json, .jsonl or .parquet file!";
 				this.loading = false;
 				return;
 
@@ -1044,6 +1057,7 @@ export default {
 			reader.readAsText( file, "UTF-8" );
 			reader.onload = async evt => {
 
+				let cm;
 				const fileContent = evt.target.result;
 
 				if ( this.file_type === "jsonl" ) {
@@ -1074,15 +1088,55 @@ export default {
 
 				}
 
-
-				this.performanceMode = Object.keys( cm.CityObjects ).length > 10000;
-				this.citymodel = this.performanceMode ? Object.freeze( cm ) : cm;
-				this.has_versions = "versioning" in cm;
-
-				this.file_loaded = true;
-				this.loading = false;
+				this.loadCityModel( cm );
 
 			};
+
+		},
+		async loadCityParquet( files ) {
+
+			this.file_type = "parquet";
+
+			try {
+
+				const buffers = await Promise.all( files.map( file => new Promise( ( resolve, reject ) => {
+
+					const reader = new FileReader();
+					reader.onload = evt => resolve( { name: file.name, buffer: evt.target.result } );
+					reader.onerror = () => reject( new Error( `Could not read ${file.name}` ) );
+					reader.readAsArrayBuffer( file );
+
+				} ) ) );
+
+				const util = new CityParquetUtils();
+				const cm = await util.toCityJSON( buffers );
+
+				if ( ! cm || Object.keys( cm.CityObjects ).length === 0 ) {
+
+					this.error_message = 'No city objects found in the CityParquet file(s).';
+					this.loading = false;
+					return;
+
+				}
+
+				this.loadCityModel( cm );
+
+			} catch ( error ) {
+
+				this.error_message = `Failed to read CityParquet: ${error.message}`;
+				this.loading = false;
+
+			}
+
+		},
+		loadCityModel( cm ) {
+
+			this.performanceMode = Object.keys( cm.CityObjects ).length > 10000;
+			this.citymodel = this.performanceMode ? Object.freeze( cm ) : cm;
+			this.has_versions = "versioning" in cm;
+
+			this.file_loaded = true;
+			this.loading = false;
 
 		},
 		download( filename, text ) {

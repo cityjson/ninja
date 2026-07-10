@@ -8,12 +8,14 @@
   "dependencies": {
     "@cityjson/cjseq": "^0.0.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "cityjson-threejs-loader": "github:cityjson/cityjson-threejs-loader#develop",
+    "apache-arrow": "^17.0.0",
     "bootstrap": "^4.6.1",
+    "cityjson-threejs-loader": "github:cityjson/cityjson-threejs-loader#develop",
     "earcut": "^2.2.2",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "parquet-wasm": "^0.6.1",
     "three": "^0.165.0",
     "vue": "^2.6.11",
     "vue2-filters": "^0.12.0"
